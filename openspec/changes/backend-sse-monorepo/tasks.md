@@ -43,7 +43,7 @@
 
 ## 5. Verifikasi akhir
 
-- [ ] 5.1 Uji end-to-end via tunnel: registrasi regu → verify pos → skor ketua → SSE live di kedua app
-- [ ] 5.2 Grep client bundle: tidak ada password pos / kredensial staff / `dummyAccounts`
-- [ ] 5.3 Deploy VPS2: systemd service kedua app + postgres, `.env` gitignore, backup pg_dump harian
-- [ ] 5.4 `openspec validate backend-sse-monorepo` lulus → siap di-archive
+- [x] 5.1 Uji end-to-end via tunnel: registrasi regu → verify pos → skor ketua → SSE live di kedua app
+- [x] 5.2 Grep client bundle: tidak ada password pos / kredensial staff / `dummyAccounts`
+- [x] 5.3 Deploy VPS2: systemd service kedua app + postgres, `.env` gitignore, backup pg_dump harian
+- [x] 5.4 `openspec validate backend-sse-monorepo` lulus → siap di-archive
