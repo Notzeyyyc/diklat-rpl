@@ -13,17 +13,17 @@
 
 ## 2. Fase 1 — Monorepo + backend/SSE di quest
 
-- [ ] 2.1 Buat monorepo fresh di `/root/diklat`: pnpm-workspace.yaml, root package.json, pindahkan kode ke `apps/dashboard` & `apps/quest`, commit OpenSpec artifacts, `pnpm -r build` hijau
-- [ ] 2.2 `packages/shared`: types.ts, positions.ts, api-contract.ts, schema.sql (dari briefing), `@diklat/shared` ter-resolve di kedua app
-- [ ] 2.3 Setup Postgres di VPS2 + jalankan schema.sql + seed 5 pos (bcrypt) & 10 tim
-- [ ] 2.4 `server/utils/db.ts` (postgres.js singleton globalThis) + `server/utils/bus.ts` (EventEmitter globalThis)
-- [ ] 2.5 Endpoint `POST/GET /api/teams` + rate limit Map 10 req/menit/IP
-- [ ] 2.6 Endpoint `POST /api/pos/:id/verify` — hash compare server-side, cek `isPosAvailable` server-side, catat team_progress, publish `progress`
-- [ ] 2.7 `server/api/events.get.ts` SSE + heartbeat 25s
-- [ ] 2.8 Composable `useRealtime()` (client-only, reconnect, fallback polling 5s, close di onUnmounted); grid `/pos` & `/pos/progress` subscribe
-- [ ] 2.9 Refactor `useGameState`: sumber kebenaran API, `team_id` di localStorage, load sekali di plugin client (fix hydration mismatch)
-- [ ] 2.10 Scan QR kamera asli: baca QR → isi ke alur verify server yang sama; fallback input manual tanpa kamera
-- [ ] 2.11 Test quest: happy path + bypass guard + password salah; `pnpm -r build` hijau → commit
+- [x] 2.1 Buat monorepo fresh di `/root/diklat`: pnpm-workspace.yaml, root package.json, pindahkan kode ke `apps/dashboard` & `apps/quest`, commit OpenSpec artifacts, `pnpm -r build` hijau
+- [x] 2.2 `packages/shared`: types.ts, positions.ts, api-contract.ts, schema.sql (dari briefing), `@diklat/shared` ter-resolve di kedua app
+- [x] 2.3 Setup Postgres di VPS2 + jalankan schema.sql + seed 5 pos (bcrypt) & 10 tim
+- [x] 2.4 `server/utils/db.ts` (postgres.js singleton globalThis) + `server/utils/bus.ts` (EventEmitter globalThis)
+- [x] 2.5 Endpoint `POST/GET /api/teams` + rate limit Map 10 req/menit/IP
+- [x] 2.6 Endpoint `POST /api/pos/:id/verify` — hash compare server-side, cek `isPosAvailable` server-side, catat team_progress, publish `progress`
+- [x] 2.7 `server/api/events.get.ts` SSE + heartbeat 25s
+- [x] 2.8 Composable `useRealtime()` (client-only, reconnect, fallback polling 5s, close di onUnmounted); grid `/pos` & `/pos/progress` subscribe
+- [x] 2.9 Refactor `useGameState`: sumber kebenaran API, `team_id` di localStorage, load sekali di plugin client (fix hydration mismatch)
+- [x] 2.10 Scan QR kamera asli: baca QR → isi ke alur verify server yang sama; fallback input manual tanpa kamera
+- [x] 2.11 Test quest: happy path + bypass guard + password salah; `pnpm -r build` hijau → commit
 
 ## 3. Fase 2 — Dashboard
 
