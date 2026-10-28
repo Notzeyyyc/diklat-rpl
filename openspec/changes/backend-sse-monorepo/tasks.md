@@ -36,10 +36,10 @@
 
 ## 4. Fase 3 — Mobile polish (kedua app)
 
-- [ ] 4.1 Tap target ≥ 44px (nav item 32×24, CLUE 66×20, semua `size="sm"` path mobile → `md`)
-- [ ] 4.2 Dashboard mobile: sidebar jadi slideover + tombol toggle
-- [ ] 4.3 `maxlength` semua input + label `for`/`id` ter-asosiasi
-- [ ] 4.4 Verifikasi Playwright 375/414px: 0 tap target < 44px, 0 overflow horizontal, semua klik jalan → commit
+- [x] 4.1 Tap target ≥ 44px (nav item 32×24, CLUE 66×20, semua `size="sm"` path mobile → `md`)
+- [x] 4.2 Dashboard mobile: sidebar jadi slideover + tombol toggle
+- [x] 4.3 `maxlength` semua input + label `for`/`id` ter-asosiasi
+- [x] 4.4 Verifikasi Playwright 375/414px: 0 tap target < 44px, 0 overflow horizontal, semua klik jalan → commit
 
 ## 5. Verifikasi akhir
 

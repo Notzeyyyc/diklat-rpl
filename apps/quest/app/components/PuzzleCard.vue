@@ -10,11 +10,11 @@
           </span>
           <button
             type="button"
-            class="px-2 py-0.5 rounded bg-surface-container text-on-surface text-label-badge uppercase border-[1.5px] border-on-surface flex items-center gap-0.5 cursor-pointer hover:bg-surface-container-high transition-all"
+            class="min-h-[44px] px-4 py-1 rounded bg-surface-container text-on-surface text-label-badge uppercase border-[1.5px] border-on-surface flex items-center gap-1 cursor-pointer hover:bg-surface-container-high transition-all"
             @click="$emit('nextSlide')"
           >
             <span>CLUE</span>
-            <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+            <span class="material-symbols-outlined text-[18px]">chevron_right</span>
           </button>
         </div>
 
@@ -41,10 +41,10 @@
           </span>
           <button
             type="button"
-            class="px-2 py-0.5 rounded bg-surface-container text-on-surface text-label-badge uppercase border-[1.5px] border-on-surface flex items-center gap-0.5 cursor-pointer hover:bg-surface-container-high transition-all"
+            class="min-h-[44px] px-4 py-1 rounded bg-surface-container text-on-surface text-label-badge uppercase border-[1.5px] border-on-surface flex items-center gap-1 cursor-pointer hover:bg-surface-container-high transition-all"
             @click="$emit('prevSlide')"
           >
-            <span class="material-symbols-outlined text-[14px]">chevron_left</span>
+            <span class="material-symbols-outlined text-[18px]">chevron_left</span>
             <span>SOAL</span>
           </button>
         </div>

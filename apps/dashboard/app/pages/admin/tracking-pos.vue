@@ -45,7 +45,7 @@ const teamsInField = computed(() => overview.value.teams.filter(t => t.completed
             </span>
             LIVE
           </span>
-          <UButton color="neutral" size="sm" icon="i-lucide-refresh-cw" class="neo-hover" @click="refresh">
+          <UButton color="neutral" size="md" icon="i-lucide-refresh-cw" class="neo-hover" @click="refresh">
             Refresh
           </UButton>
         </div>

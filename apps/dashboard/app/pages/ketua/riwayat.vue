@@ -100,6 +100,7 @@ function exportCSV() {
       <div class="flex flex-wrap items-center gap-4">
         <UInput
           v-model="searchQuery"
+          maxlength="100"
           placeholder="Cari nama kelompok..."
           icon="i-lucide-search"
           class="w-64"
@@ -111,7 +112,7 @@ function exportCSV() {
           class="w-40"
         />
         <div class="ml-auto flex items-center gap-3">
-          <UButton color="neutral" size="sm" icon="i-lucide-download" class="neo-hover" @click="exportCSV">
+          <UButton color="neutral" size="md" icon="i-lucide-download" class="neo-hover" @click="exportCSV">
             Export CSV
           </UButton>
         </div>

@@ -71,12 +71,14 @@ async function handleLogin() {
           <div class="space-y-3.5">
             <div>
               <div class="flex items-center justify-between mb-1.5">
-                <label class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#111]">USERNAME</label>
+                <label for="login-username" class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#111]">USERNAME</label>
                 <span class="font-mono text-[9px] text-[#737688] uppercase tracking-wider">PANITIA ID</span>
               </div>
               <input
+                id="login-username"
                 v-model="username"
                 type="text"
+                maxlength="50"
                 placeholder="Username"
                 class="w-full h-10 px-3 rounded-lg border border-[#111] bg-white text-[13px] text-[#111] placeholder:text-[#737688] outline-none transition-all duration-150 focus:ring-2 focus:ring-[#0A5CFF]/20 focus:border-[#0A5CFF] font-[inherit]"
               />
@@ -84,12 +86,14 @@ async function handleLogin() {
 
             <div>
               <div class="flex items-center justify-between mb-1.5">
-                <label class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#111]">PASSWORD</label>
+                <label for="login-password" class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#111]">PASSWORD</label>
                 <span class="font-mono text-[9px] text-[#737688] uppercase tracking-wider">MIN. 8 CHARS</span>
               </div>
               <input
+                id="login-password"
                 v-model="password"
                 type="password"
+                maxlength="100"
                 placeholder="Password"
                 class="w-full h-10 px-3 rounded-lg border border-[#111] bg-white text-[13px] text-[#111] placeholder:text-[#737688] outline-none transition-all duration-150 focus:ring-2 focus:ring-[#0A5CFF]/20 focus:border-[#0A5CFF] font-[inherit]"
               />

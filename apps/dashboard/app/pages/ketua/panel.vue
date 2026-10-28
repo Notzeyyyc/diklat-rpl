@@ -113,19 +113,21 @@ async function submitScore() {
         <div class="space-y-3">
           <USelect
             v-model="codeTeamId"
+            size="lg"
             placeholder="Pilih regu"
             class="w-full"
             :items="overview.teams.map(t => ({ label: t.name, value: t.teamId }))"
           />
           <USelect
             v-model="codePos"
+            size="lg"
             placeholder="Pilih pos"
             class="w-full"
             :items="POS_OPTIONS"
           />
           <UButton
             color="primary"
-            size="sm"
+            size="md"
             icon="i-lucide-key-round"
             block
             class="neo-hover"
@@ -158,6 +160,7 @@ async function submitScore() {
         <div class="space-y-3">
           <USelect
             v-model="scoreTeamId"
+            size="lg"
             placeholder="Pilih regu"
             class="w-full"
             :items="overview.teams.map(t => ({ label: t.name, value: t.teamId }))"
@@ -165,6 +168,7 @@ async function submitScore() {
           <div class="flex gap-3">
             <USelect
               v-model="scorePos"
+              size="lg"
               placeholder="Pos"
               class="flex-1"
               :items="POS_OPTIONS"
@@ -174,6 +178,7 @@ async function submitScore() {
               type="number"
               :min="0"
               :max="100"
+              maxlength="3"
               placeholder="Skor 0-100"
               class="flex-1"
             />
@@ -184,7 +189,7 @@ async function submitScore() {
             placeholder="Catatan (opsional)"
             class="w-full"
           />
-          <UButton color="success" size="sm" icon="i-lucide-check-circle" block class="neo-hover" :loading="submitting" @click="submitScore">
+          <UButton color="success" size="md" icon="i-lucide-check-circle" block class="neo-hover" :loading="submitting" @click="submitScore">
             Submit Skor
           </UButton>
         </div>

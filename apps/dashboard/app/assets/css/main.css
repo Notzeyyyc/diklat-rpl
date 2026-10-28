@@ -121,3 +121,25 @@
 @utility neo-sidebar-footer {
   border-top: 3px solid var(--color-neo-ink);
 }
+
+/* Mobile tap targets (Fase 3): minimal 44px pada coarse pointer */
+@media (pointer: coarse) {
+  .neo-hover {
+    min-height: 44px;
+  }
+  input,
+  select {
+    min-height: 44px;
+  }
+  /* trigger select (USelect/USelectMenu) & filter chips */
+  button {
+    min-height: 44px;
+  }
+  /* toggle sidebar & tombol close toast (ikon 18px) */
+  button[aria-label='Open sidebar'],
+  button[aria-label='Close sidebar'],
+  button[aria-label='Close'] {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}

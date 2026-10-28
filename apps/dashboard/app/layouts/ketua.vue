@@ -34,7 +34,6 @@ const items: NavigationMenuItem[][] = [
 <template>
   <UDashboardGroup storage-key="ketua-dashboard">
     <UDashboardSidebar
-      open
       :collapsible="false"
       resizable
       :menu="{ modal: false }"
@@ -42,7 +41,7 @@ const items: NavigationMenuItem[][] = [
       :default-size="22"
       :max-size="30"
       :ui="{
-        root: 'neo-sidebar bg-white relative flex flex-col min-h-svh min-w-16 w-(--width) shrink-0',
+        root: 'neo-sidebar bg-white relative hidden lg:flex flex-col min-h-svh min-w-16 w-(--width) shrink-0',
         header: 'neo-sidebar-header px-6 py-5',
         footer: 'neo-sidebar-footer px-4 py-4',
       }"
@@ -69,19 +68,20 @@ const items: NavigationMenuItem[][] = [
             orientation="vertical"
             highlight
             tooltip
+            :ui="{ link: 'min-h-11' }"
           />
         </div>
       </template>
 
       <template #footer>
         <div class="flex items-center gap-3">
-          <UAvatar size="sm" :alt="user?.username ?? 'Ketua'" class="neo-border neo-shadow-sm" />
+          <UAvatar size="md" :alt="user?.username ?? 'Ketua'" class="neo-border neo-shadow-sm" />
           <div class="flex flex-col min-w-0">
             <span class="font-display font-semibold text-sm truncate capitalize">{{ user?.username ?? 'Ketua' }}</span>
             <span class="font-mono text-[10px] text-neo-on-surface-variant truncate">Ketua Post</span>
           </div>
         </div>
-        <UButton color="neutral" variant="ghost" size="sm" icon="i-lucide-log-out" block class="neo-hover" @click="logout">
+        <UButton color="neutral" variant="ghost" size="md" icon="i-lucide-log-out" block class="neo-hover" @click="logout">
           Logout
         </UButton>
       </template>
@@ -89,7 +89,7 @@ const items: NavigationMenuItem[][] = [
 
     <UDashboardPanel>
       <template #header>
-        <UDashboardNavbar :toggle="false" class="neo-border-b-3 neo-shadow-header bg-white" />
+        <UDashboardNavbar toggle-side="left" class="neo-border-b-3 neo-shadow-header bg-white" />
       </template>
 
       <template #body>

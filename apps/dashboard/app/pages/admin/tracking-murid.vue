@@ -82,7 +82,7 @@ function exportCSV() {
             <span class="font-mono text-[10px] text-neo-on-surface-variant uppercase font-bold">Automatic Refresh</span>
             <span class="font-mono text-xs text-neo-on-surface font-bold">Interval: 5 Detik</span>
           </div>
-          <UButton color="neutral" size="sm" icon="i-lucide-refresh-cw" class="neo-hover" @click="refresh">
+          <UButton color="neutral" size="md" icon="i-lucide-refresh-cw" class="neo-hover" @click="refresh">
             Refresh Data
           </UButton>
         </div>
@@ -102,6 +102,7 @@ function exportCSV() {
           <UIcon name="i-lucide-search" class="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neo-on-surface-variant" />
           <UInput
             v-model="searchQuery"
+            maxlength="100"
             placeholder="Cari nama kelompok..."
             class="w-full pl-10"
           />
@@ -169,7 +170,7 @@ function exportCSV() {
           Menampilkan {{ filteredTeams.length }} dari {{ overview.stats.totalTeams }} Kelompok
         </span>
         <div class="flex items-center gap-3">
-          <UButton color="neutral" size="sm" icon="i-lucide-download" class="neo-hover" @click="exportCSV">
+          <UButton color="neutral" size="md" icon="i-lucide-download" class="neo-hover" @click="exportCSV">
             Ekspor Data CSV
           </UButton>
         </div>

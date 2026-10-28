@@ -91,8 +91,8 @@ function exportCSV() {
             </span>
             LIVE RANKING
           </span>
-          <UButton color="neutral" size="sm" icon="i-lucide-printer" class="neo-hover" @click="() => window.print()">Print</UButton>
-          <UButton color="primary" size="sm" icon="i-lucide-download" class="neo-hover" @click="exportCSV">Export CSV</UButton>
+          <UButton color="neutral" size="md" icon="i-lucide-printer" class="neo-hover" @click="() => window.print()">Print</UButton>
+          <UButton color="primary" size="md" icon="i-lucide-download" class="neo-hover" @click="exportCSV">Export CSV</UButton>
         </div>
       </template>
     </PageHeader>
@@ -144,9 +144,10 @@ function exportCSV() {
         <div class="flex items-center gap-3">
           <UInput
             v-model="searchQuery"
+            maxlength="100"
             placeholder="Cari kelompok..."
             icon="i-lucide-search"
-            size="sm"
+            size="md"
             class="w-48"
           />
         </div>

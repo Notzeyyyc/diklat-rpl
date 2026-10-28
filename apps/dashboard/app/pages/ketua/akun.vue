@@ -80,7 +80,7 @@ async function handleLogout() {
             <UButton
               v-if="!isEditing"
               color="primary"
-              size="sm"
+              size="md"
               icon="i-lucide-pencil"
               class="neo-hover"
               @click="isEditing = true"
@@ -94,7 +94,7 @@ async function handleLogout() {
               Profil panitia dikelola server — tidak dapat diubah dari sini.
             </p>
             <div class="flex gap-3 justify-end">
-              <UButton color="neutral" size="sm" class="neo-hover" @click="cancelEdit">Batal</UButton>
+              <UButton color="neutral" size="md" class="neo-hover" @click="cancelEdit">Batal</UButton>
             </div>
           </div>
 
@@ -135,21 +135,21 @@ async function handleLogout() {
                 <div class="font-display font-semibold text-sm">Ubah Password</div>
                 <div class="font-mono text-[10px] text-neo-on-surface-variant">Terakhir diubah 30 hari lalu</div>
               </div>
-              <UButton color="neutral" size="sm" icon="i-lucide-key" class="neo-hover">Ubah</UButton>
+              <UButton color="neutral" size="md" icon="i-lucide-key" class="neo-hover">Ubah</UButton>
             </div>
             <div class="flex items-center justify-between py-3 border-b border-neo-outline-variant">
               <div>
                 <div class="font-display font-semibold text-sm">Two-Factor Auth</div>
                 <div class="font-mono text-[10px] text-neo-on-surface-variant">Belum diaktifkan</div>
               </div>
-              <UButton color="neutral" size="sm" icon="i-lucide-smartphone" class="neo-hover">Aktifkan</UButton>
+              <UButton color="neutral" size="md" icon="i-lucide-smartphone" class="neo-hover">Aktifkan</UButton>
             </div>
             <div class="flex items-center justify-between py-3">
               <div>
                 <div class="font-display font-semibold text-sm">Logout</div>
                 <div class="font-mono text-[10px] text-neo-on-surface-variant">Keluar dari sesi ini</div>
               </div>
-              <UButton color="danger" size="sm" icon="i-lucide-log-out" class="neo-hover" @click="handleLogout">Logout</UButton>
+              <UButton color="danger" size="md" icon="i-lucide-log-out" class="neo-hover" @click="handleLogout">Logout</UButton>
             </div>
           </div>
         </NeoCard>

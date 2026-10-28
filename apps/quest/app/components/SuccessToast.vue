@@ -11,8 +11,8 @@
         {{ message }}
       </p>
     </div>
-    <button class="text-on-surface hover:text-primary transition-colors" @click="$emit('dismiss')" type="button">
-      <span class="material-symbols-outlined text-[18px]">close</span>
+    <button class="text-on-surface hover:text-primary transition-colors min-w-[44px] min-h-[44px] flex items-center justify-center -me-2 -mt-2" @click="$emit('dismiss')" type="button" aria-label="Tutup notifikasi">
+      <span class="material-symbols-outlined text-[20px]">close</span>
     </button>
   </div>
 </template>

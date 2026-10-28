@@ -1,9 +1,11 @@
 <template>
   <div class="w-full relative">
     <input
+      :id="id"
       :value="modelValue"
       type="text"
       :placeholder="placeholder"
+      maxlength="40"
       autocomplete="off"
       class="neo-input text-headline-sm text-center placeholder:text-outline"
       :class="{ 'border-error': error }"
@@ -13,6 +15,7 @@
 </template>
 
 <script setup lang="ts">
+const id = useId()
 defineProps<{
   modelValue: string
   placeholder?: string
