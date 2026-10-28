@@ -29,7 +29,21 @@
 <script setup lang="ts">
 const route = useRoute()
 const router = useRouter()
-const { state, isPosCompleted, isPosAvailable, isValidPos, selectPos, progress } = useGameState()
+const { state, isPosCompleted, isPosAvailable, isValidPos, completePos, progress } = useGameState()
+
+// SSE live: progres update tanpa refresh
+const refetch = async () => {
+  if (!state.value.teamId) return
+  try {
+    const teams = await $fetch<{ id: string; completedPositions: number[] }[]>('/api/teams')
+    const me = teams.find((t) => t.id === state.value.teamId)
+    if (me) state.value.completedPos = me.completedPositions
+  } catch { /* polling berikutnya coba lagi */ }
+}
+
+useRealtime((e) => {
+  if (e.type === 'progress' && e.teamId === state.value.teamId) completePos(e.positionId)
+}, refetch)
 
 // Query ?done dipakai hanya kalau pos-nya valid DAN memang sudah selesai
 const doneParam = Number(route.query.done)
@@ -39,7 +53,6 @@ const showToast = ref(lastCompletedPos.value > 0)
 
 const handleSelectPos = (pos: number) => {
   if (isPosAvailable(pos) && !isPosCompleted(pos)) {
-    selectPos(pos)
     router.push(`/pos/${pos}`)
   }
 }

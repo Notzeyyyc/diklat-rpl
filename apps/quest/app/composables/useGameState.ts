@@ -1,52 +1,23 @@
+// ponytail: hanya 1 file state — sumber kebenaran = API/DB; localStorage cuma simpan team_id.
+import type { Team } from '@diklat/shared'
+
 interface GameState {
-  groupName: string
+  teamId: string | null
   teamName: string
-  currentPos: number | null
   completedPos: number[]
   totalPos: number
 }
 
-const STORAGE_KEY = 'diklat-game-state'
+const STORAGE_KEY = 'diklat-team-id'
 
 export const useGameState = () => {
-  // useState = SSR-safe, ga bocor antar request (beda dgn reactive di module scope)
+  // useState = SSR-safe, hydration aman: server render default, client diisi plugin
   const state = useState<GameState>('game-state', () => ({
-    groupName: '',
+    teamId: null,
     teamName: '',
-    currentPos: null,
     completedPos: [],
     totalPos: 5,
   }))
-
-  // Persist ke sessionStorage biar reload ga reset. Client-only.
-  if (import.meta.client) {
-    const saved = sessionStorage.getItem(STORAGE_KEY)
-    if (saved) {
-      try {
-        Object.assign(state.value, JSON.parse(saved))
-      } catch {
-        // korup → abaikan, pakai default
-      }
-    }
-    watch(state, (val) => {
-      sessionStorage.setItem(STORAGE_KEY, JSON.stringify(val))
-    }, { deep: true })
-  }
-
-  const registerGroup = (name: string) => {
-    state.value.groupName = name
-    state.value.teamName = name.toUpperCase()
-  }
-
-  const selectPos = (pos: number) => {
-    state.value.currentPos = pos
-  }
-
-  const completePos = (pos: number) => {
-    if (!state.value.completedPos.includes(pos)) {
-      state.value.completedPos.push(pos)
-    }
-  }
 
   const isPosCompleted = (pos: number) => state.value.completedPos.includes(pos)
 
@@ -54,16 +25,65 @@ export const useGameState = () => {
   const isPosAvailable = (pos: number) =>
     pos === 1 || state.value.completedPos.includes(pos - 1)
 
-  // Route guard: id valid = integer 1..totalPos
   const isValidPos = (pos: number) =>
     Number.isInteger(pos) && pos >= 1 && pos <= state.value.totalPos
 
   const progress = computed(() => state.value.completedPos.length)
 
+  /** Registrasi regu → POST /api/teams. 409 = nama sudah ada → ambil id-nya dari daftar. */
+  const registerGroup = async (name: string) => {
+    const clean = name.trim().toUpperCase()
+    try {
+      const res = await $fetch<{ id: string; name: string }>('/api/teams', {
+        method: 'POST',
+        body: { name: clean },
+      })
+      state.value.teamId = res.id
+      state.value.teamName = res.name
+    } catch (err: unknown) {
+      const status = (err as { statusCode?: number }).statusCode
+      if (status !== 409) throw err
+      const teams = await $fetch<Team[]>('/api/teams')
+      const existing = teams.find((t) => t.name === clean)
+      if (!existing) throw err
+      state.value.teamId = existing.id
+      state.value.teamName = existing.name
+      state.value.completedPos = existing.completedPositions
+    }
+    if (import.meta.client && state.value.teamId) {
+      localStorage.setItem(STORAGE_KEY, state.value.teamId)
+    }
+    return state.value.teamId
+  }
+
+  /** Dipanggil plugin client sekali: restore sesi dari localStorage + GET /api/teams. */
+  const loadFromApi = async () => {
+    if (import.meta.server) return
+    const teamId = localStorage.getItem(STORAGE_KEY)
+    if (!teamId) return
+    try {
+      const teams = await $fetch<Team[]>('/api/teams')
+      const team = teams.find((t) => t.id === teamId)
+      if (!team) {
+        localStorage.removeItem(STORAGE_KEY)
+        return
+      }
+      state.value.teamId = team.id
+      state.value.teamName = team.name
+      state.value.completedPos = team.completedPositions
+    } catch { // API down → pakai state default, refresh lewat realtime fallback
+    }
+  }
+
+  /** Sinkron lokal setelah verify sukses (sumber kebenaran tetap DB). */
+  const completePos = (pos: number) => {
+    if (!state.value.completedPos.includes(pos)) state.value.completedPos.push(pos)
+  }
+
   return {
     state,
     registerGroup,
-    selectPos,
+    loadFromApi,
     completePos,
     isPosCompleted,
     isPosAvailable,

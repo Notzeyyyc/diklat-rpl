@@ -35,7 +35,7 @@ const showError = ref(false)
 const errorMessage = ref('')
 const isSubmitting = ref(false)
 
-const handleSubmit = () => {
+const handleSubmit = async () => {
   const name = groupName.value.trim()
 
   if (name.length < 3) {
@@ -51,10 +51,14 @@ const handleSubmit = () => {
   }
 
   isSubmitting.value = true
-
-  setTimeout(() => {
-    registerGroup(name)
+  try {
+    await registerGroup(name)
     router.push('/pos')
-  }, 600)
+  } catch {
+    showError.value = true
+    errorMessage.value = 'Gagal menyimpan. Coba lagi!'
+  } finally {
+    isSubmitting.value = false
+  }
 }
 </script>

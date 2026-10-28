@@ -21,11 +21,24 @@
 
 <script setup lang="ts">
 const router = useRouter()
-const { state, isPosCompleted, isPosAvailable, selectPos } = useGameState()
+const { state, isPosCompleted, isPosAvailable, completePos } = useGameState()
+
+// SSE live: pos kebuka otomatis tanpa refresh; fallback polling refetch dari API.
+const refetch = async () => {
+  if (!state.value.teamId) return
+  try {
+    const teams = await $fetch<{ id: string; completedPositions: number[] }[]>('/api/teams')
+    const me = teams.find((t) => t.id === state.value.teamId)
+    if (me) state.value.completedPos = me.completedPositions
+  } catch { /* polling berikutnya coba lagi */ }
+}
+
+useRealtime((e) => {
+  if (e.type === 'progress' && e.teamId === state.value.teamId) completePos(e.positionId)
+}, refetch)
 
 const handleSelectPos = (pos: number) => {
   if (isPosAvailable(pos)) {
-    selectPos(pos)
     router.push(`/pos/${pos}`)
   }
 }

@@ -13,7 +13,7 @@
           @prevSlide="currentSlide = 1"
         >
           <template #slide1>
-            <PasswordInput v-model="password" label="MASUKKAN PASSWORD DARI PANITIA" placeholder="Contoh: RPLJUARA" />
+            <PasswordInput v-model="password" label="MASUKKAN PASSWORD DARI PANITIA" placeholder="Password dari panitia" />
             <ValidationMessage :message="statusMessage" :variant="statusVariant" :icon="statusIcon" />
             <button
               type="button"
@@ -28,8 +28,8 @@
 
         <QRScanner
           title="SCAN QR UNTUK LANJUT"
-          description="Scan QR yang diberikan oleh penjaga pos untuk melanjutkan. (Fitur scan belum tersedia — demo saja.)"
-          buttonText="DEMO"
+          description="Scan QR yang diberikan penjaga pos, atau ketik password secara manual."
+          buttonText="MULAI SCAN"
           @scan="handleScanQR"
         />
 
@@ -47,7 +47,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const router = useRouter()
-const { completePos, isValidPos, isPosAvailable } = useGameState()
+const { state, completePos, isValidPos, isPosAvailable } = useGameState()
 
 const posId = computed(() => Number(route.params.id))
 
@@ -72,8 +72,8 @@ const procedureSteps = [
   { bold: 'Terima password', text: ' & masukkan ke kolom di atas untuk verifikasi.', highlight: true },
 ]
 
-const handleVerification = () => {
-  const val = password.value.trim().toUpperCase()
+const handleVerification = async () => {
+  const val = password.value.trim()
 
   if (!val) {
     statusVariant.value = 'error'
@@ -82,9 +82,18 @@ const handleVerification = () => {
     return
   }
 
-  // ponytail: password hardcoded di frontend (game lapangan, belum ada backend).
-  // Upgrade: pindah verifikasi ke server API pas backend jadi.
-  if (val === 'RPLJUARA' || val === 'PARKIRAN26') {
+  if (!state.value.teamId) {
+    statusVariant.value = 'error'
+    statusMessage.value = 'Regu belum terdaftar. Kembali ke halaman awal!'
+    statusIcon.value = 'error'
+    return
+  }
+
+  try {
+    await $fetch(`/api/pos/${posId.value}/verify`, {
+      method: 'POST',
+      body: { teamId: state.value.teamId, password: val },
+    })
     statusVariant.value = 'success'
     statusMessage.value = 'BERHASIL! Menuju halaman progres...'
     statusIcon.value = 'check_circle'
@@ -92,17 +101,17 @@ const handleVerification = () => {
     setTimeout(() => {
       router.push({ path: '/pos/progress', query: { done: String(posId.value) } })
     }, 600)
-  } else {
+  } catch (err: unknown) {
     statusVariant.value = 'error'
-    statusMessage.value = 'Password salah. Konfirmasi ke panitia di Pos!'
+    statusMessage.value = (err as { data?: { statusMessage?: string } }).data?.statusMessage
+      ?? 'Verifikasi gagal. Coba lagi!'
     statusIcon.value = 'warning'
   }
 }
 
-const handleScanQR = () => {
-  // Stub jujur: belum ada kamera/verifikasi QR. Jangan pernah set success dari sini.
-  statusVariant.value = 'error'
-  statusMessage.value = 'Scan QR belum tersedia. Konfirmasi ke panitia pos untuk lanjut.'
-  statusIcon.value = 'qr_code_scanner'
+const handleScanQR = (value: string) => {
+  // QR berisi password pos → masuk alur verify server yang sama
+  password.value = value
+  handleVerification()
 }
 </script>
