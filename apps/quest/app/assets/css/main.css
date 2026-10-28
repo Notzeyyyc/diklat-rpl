@@ -1,0 +1,82 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html,
+  body {
+    @apply w-full m-0 p-0;
+    background-color: #e8e5e3;
+  }
+
+  body {
+    overscroll-behavior: none;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .pb-safe {
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  .pt-safe {
+    padding-top: env(safe-area-inset-top, 0px);
+  }
+
+  main > :first-child {
+    margin-top: 0 !important;
+  }
+
+  main > :last-child {
+    margin-bottom: 0 !important;
+  }
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+@layer components {
+  .neo-border {
+    @apply border-[3px] border-[#111111];
+  }
+
+  .neo-border-lg {
+    @apply border-[4px] border-[#111111];
+  }
+
+  .neo-shadow {
+    @apply shadow-neo;
+  }
+
+  .neo-shadow-lg {
+    @apply shadow-neo-lg;
+  }
+
+  .neo-shadow-xl {
+    @apply shadow-neo-xl;
+  }
+
+  .neo-pressed {
+    @apply translate-x-[2px] translate-y-[2px] shadow-neo-pressed;
+  }
+
+  .neo-card {
+    @apply bg-surface-container-lowest rounded-xl neo-border neo-shadow-xl;
+  }
+
+  .neo-chip {
+    @apply inline-flex items-center gap-1 px-2 py-0.5 rounded border-[2px] border-[#111111] shadow-neo-sm;
+  }
+
+  .neo-btn {
+    @apply text-label-btn font-bold uppercase tracking-wider neo-border neo-shadow-xl rounded-xl active:neo-pressed transition-all duration-75 cursor-pointer;
+  }
+
+  .neo-input {
+    @apply w-full bg-surface-container-lowest neo-border rounded-xl p-space-md neo-shadow-xl focus:outline-none focus:bg-surface-container-low focus:shadow-[4px_4px_0px_#0a5cff] transition-all duration-100;
+  }
+
+  .font-space-grotesk {
+    font-family: 'Space Grotesk', sans-serif;
+  }
+}

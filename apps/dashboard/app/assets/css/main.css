@@ -1,0 +1,123 @@
+@import "tailwindcss";
+
+@source inline("neo-shadow-sm neo-shadow-md neo-shadow-lg neo-shadow-xl neo-shadow-sidebar neo-shadow-header neo-border neo-border-thick neo-active neo-hover neo-sidebar neo-sidebar-header neo-sidebar-footer");
+
+@theme {
+  --font-display: 'Space Grotesk', system-ui, sans-serif;
+  --font-body: 'Space Grotesk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  --color-neo-primary: #0046cb;
+  --color-neo-primary-container: #0a5cff;
+  --color-neo-on-primary: #ffffff;
+  --color-neo-on-primary-container: #ecedff;
+
+  --color-neo-secondary: #006b5f;
+  --color-neo-secondary-container: #62fae3;
+  --color-neo-on-secondary: #ffffff;
+
+  --color-neo-tertiary: #735c00;
+  --color-neo-tertiary-container: #cea700;
+
+  --color-neo-danger: #ff4b4b;
+  --color-neo-danger-container: #ffdad6;
+
+  --color-neo-surface: #fcf9f8;
+  --color-neo-surface-dim: #dcd9d9;
+  --color-neo-surface-container: #f0edec;
+  --color-neo-surface-container-high: #ebe7e7;
+  --color-neo-surface-container-highest: #e5e2e1;
+  --color-neo-on-surface: #1c1b1b;
+  --color-neo-on-surface-variant: #434656;
+
+  --color-neo-outline: #737688;
+  --color-neo-outline-variant: #c3c5d9;
+  --color-neo-ink: #111111;
+
+  --color-neo-success: #2dd4bf;
+  --color-neo-warning: #facc15;
+  --color-neo-info: #e0e7ff;
+
+  --spacing-section: 2rem;
+  --spacing-card: 1.5rem;
+  --spacing-inline: 1rem;
+}
+
+@layer base {
+  html {
+    font-family: var(--font-body);
+    background-color: var(--color-neo-surface);
+    color: var(--color-neo-on-surface);
+  }
+
+  ::selection {
+    background-color: var(--color-neo-secondary-container);
+    color: var(--color-neo-on-surface);
+  }
+
+  ::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility neo-shadow-sm {
+  box-shadow: 2px 2px 0px var(--color-neo-ink);
+}
+
+@utility neo-shadow-md {
+  box-shadow: 4px 4px 0px var(--color-neo-ink);
+}
+
+@utility neo-shadow-lg {
+  box-shadow: 6px 6px 0px var(--color-neo-ink);
+}
+
+@utility neo-shadow-xl {
+  box-shadow: 8px 8px 0px var(--color-neo-ink);
+}
+
+@utility neo-shadow-sidebar {
+  box-shadow: 4px 0px 0px var(--color-neo-ink);
+}
+
+@utility neo-shadow-header {
+  box-shadow: 0px 4px 0px var(--color-neo-ink);
+}
+
+@utility neo-border {
+  border: 2px solid var(--color-neo-ink);
+}
+
+@utility neo-border-thick {
+  border: 3px solid var(--color-neo-ink);
+}
+
+@utility neo-active {
+  transform: translate(2px, 2px);
+  box-shadow: 1px 1px 0px var(--color-neo-ink);
+}
+
+@utility neo-hover {
+  transition: transform 100ms ease, box-shadow 100ms ease;
+  &:hover {
+    transform: translate(-1px, -1px);
+    box-shadow: 5px 5px 0px var(--color-neo-ink);
+  }
+  &:active {
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px 0px var(--color-neo-ink);
+  }
+}
+
+@utility neo-sidebar {
+  border-right: 3px solid var(--color-neo-ink);
+  box-shadow: 4px 0px 0px var(--color-neo-ink);
+}
+
+@utility neo-sidebar-header {
+  border-bottom: 3px solid var(--color-neo-ink);
+}
+
+@utility neo-sidebar-footer {
+  border-top: 3px solid var(--color-neo-ink);
+}

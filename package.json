@@ -1,0 +1,9 @@
+{
+  "name": "diklat-monorepo",
+  "private": true,
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "build": "pnpm -r build",
+    "seed": "pnpm --filter @diklat/shared seed"
+  }
+}
