@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+import type { SessionUser } from '@diklat/shared'
+
+const { data: user } = useFetch<SessionUser | null>('/api/auth/me')
+
+async function logout() {
+  await $fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
+  useToast().add({ title: 'Sampai jumpa!', description: 'Anda telah keluar.', color: 'neutral' })
+  await navigateTo('/login')
+}
 
 const items: NavigationMenuItem[][] = [
   [
@@ -12,11 +21,6 @@ const items: NavigationMenuItem[][] = [
       label: 'Leaderboard',
       icon: 'i-lucide-trophy',
       to: '/admin/leaderboard',
-    },
-    {
-      label: 'Pos Evaluation Hub',
-      icon: 'i-lucide-layout-grid',
-      to: '/admin/pos-evaluation-hub',
     },
     {
       label: 'Tracking Pos',
@@ -78,16 +82,19 @@ const items: NavigationMenuItem[][] = [
             </div>
             <div class="font-mono text-[10px] text-neo-on-surface-variant leading-relaxed">
               Node: v2.6.4-prod<br>
-              Sync: WebSockets Active
+              Sync: SSE Active
             </div>
           </div>
           <div class="flex items-center gap-3">
-            <UAvatar size="sm" alt="Admin" class="neo-border neo-shadow-sm" />
+            <UAvatar size="sm" :alt="user?.username ?? 'Admin'" class="neo-border neo-shadow-sm" />
             <div class="flex flex-col min-w-0">
-              <span class="font-display font-semibold text-sm truncate">Admin</span>
-              <span class="font-mono text-[10px] text-neo-on-surface-variant truncate">KTP-ADM-2026</span>
+              <span class="font-display font-semibold text-sm truncate capitalize">{{ user?.username ?? 'Admin' }}</span>
+              <span class="font-mono text-[10px] text-neo-on-surface-variant truncate">Administrator</span>
             </div>
           </div>
+          <UButton color="neutral" variant="ghost" size="sm" icon="i-lucide-log-out" block class="neo-hover" @click="logout">
+            Logout
+          </UButton>
         </div>
       </template>
     </UDashboardSidebar>

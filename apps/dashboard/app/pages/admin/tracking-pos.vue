@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { TeamOverview } from '@diklat/shared'
+
 definePageMeta({
   layout: 'admin',
 })
@@ -7,67 +9,23 @@ useHead({
   title: 'Tracking Pos - Admin Dashboard',
 })
 
-const posData = [
-  {
-    id: 'POS 01',
-    name: 'Logika Dasar & Algoritma',
-    status: 'active',
-    groupCount: 2,
-    groups: ['Garuda', 'Nusantara'],
-    description: 'Pemahaman logika program dan algoritma dasar',
-  },
-  {
-    id: 'POS 02',
-    name: 'Adrenalin & Jaringan Kabel',
-    status: 'active',
-    groupCount: 1,
-    groups: ['Syntax Error'],
-    description: 'Konfigurasi jaringan kabel UTP dan troubleshooting',
-  },
-  {
-    id: 'POS 03',
-    name: 'Hardware & Troubleshooting',
-    status: 'busy',
-    groupCount: 3,
-    groups: ['ByteForce', 'Logic', 'Pixel'],
-    description: 'Diagnosa dan perbaikan hardware komputer',
-  },
-  {
-    id: 'POS 04',
-    name: 'Kecepatan Ketik & Debugging',
-    status: 'active',
-    groupCount: 1,
-    groups: ['CyberKnights'],
-    description: 'Typing speed test dan debugging kode',
-  },
-  {
-    id: 'POS 05',
-    name: 'Final System Integration',
-    status: 'active',
-    groupCount: 1,
-    groups: ['StackOverlords'],
-    description: 'Integrasi sistem akhir dan testing menyeluruh',
-  },
-]
+const { overview, liveEvents, refresh } = useOverview()
 
-const activityLog = [
-  { time: '14:32', pos: 'POS 03', group: 'ByteForce', activity: 'Memulai sesi evaluasi hardware', status: 'active' },
-  { time: '14:28', pos: 'POS 01', group: 'Garuda', activity: 'Mengirim jawaban soal logika', status: 'pending' },
-  { time: '14:25', pos: 'POS 04', group: 'CyberKnights', activity: 'Menyelesaikan debugging level 2', status: 'completed' },
-  { time: '14:20', pos: 'POS 02', group: 'Syntax Error', activity: 'Memulai konfigurasi jaringan', status: 'active' },
-  { time: '14:15', pos: 'POS 05', group: 'StackOverlords', activity: 'Menunggu giliran integrasi', status: 'standby' },
-]
+// Kelompok "sedang di" pos X = pos berikutnya yang belum dia selesaikan adalah X
+const atPos = (posId: number): TeamOverview[] =>
+  overview.value.teams.filter((t) => !t.completedPositions.includes(posId) && t.completedPositions.length === posId - 1)
 
-function getStatusBadge(status: string): { label: string; status: 'success' | 'warning' | 'active' | 'standby' | 'busy' | 'completed' | 'pending' | 'info' | 'danger' } {
-  const map: Record<string, { label: string; status: 'success' | 'warning' | 'active' | 'standby' | 'busy' | 'completed' | 'pending' | 'info' | 'danger' }> = {
-    active: { label: 'ACTIVE', status: 'active' },
-    busy: { label: 'BUSY', status: 'busy' },
-    completed: { label: 'COMPLETED', status: 'completed' },
-    pending: { label: 'PENDING', status: 'pending' },
-    standby: { label: 'STANDBY', status: 'standby' },
-  }
-  return map[status] || { label: status.toUpperCase(), status: 'active' }
-}
+const posData = computed(() =>
+  [1, 2, 3, 4, 5].map(posId => ({
+    id: `POS 0${posId}`,
+    name: '',
+    groups: atPos(posId).map(t => t.name),
+    groupCount: atPos(posId).length,
+    status: atPos(posId).length >= 3 ? 'busy' : 'active',
+  })),
+)
+
+const teamsInField = computed(() => overview.value.teams.filter(t => t.completedPositions.length > 0 && t.completedPositions.length < 5).length)
 </script>
 
 <template>
@@ -87,7 +45,7 @@ function getStatusBadge(status: string): { label: string; status: 'success' | 'w
             </span>
             LIVE
           </span>
-          <UButton color="neutral" size="sm" icon="i-lucide-refresh-cw" class="neo-hover" @click="() => {}">
+          <UButton color="neutral" size="sm" icon="i-lucide-refresh-cw" class="neo-hover" @click="refresh">
             Refresh
           </UButton>
         </div>
@@ -96,8 +54,8 @@ function getStatusBadge(status: string): { label: string; status: 'success' | 'w
 
     <div class="grid grid-cols-1 sm:grid-cols-3 gap-5">
       <StatCard label="Total Pos Aktif" value="5/5 (100%)" icon="i-lucide-map-pin" color="primary" />
-      <StatCard label="Kelompok di Pos" value="8 Kelompok" subtext="48 Peserta" icon="i-lucide-users" color="secondary" />
-      <StatCard label="Status Jalur" value="Terkendali" subtext="Zero Bottleneck" icon="i-lucide-check-circle" color="success" />
+      <StatCard label="Kelompok di Lapangan" :value="`${teamsInField} Kelompok`" subtext="Antara basecamp & finish" icon="i-lucide-users" color="secondary" />
+      <StatCard label="Basecamp" :value="`${overview.stats.totalTeams - teamsInField - overview.stats.completedTeams} Kelompok`" subtext="Belum mulai" icon="i-lucide-check-circle" color="success" />
     </div>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -114,9 +72,8 @@ function getStatusBadge(status: string): { label: string; status: 'success' | 'w
           <span class="font-mono text-[10px] text-neo-on-surface-variant">{{ pos.groupCount }} grp</span>
         </div>
         <div class="p-5">
-          <h3 class="font-display font-bold text-sm mb-1">{{ pos.name }}</h3>
-          <p class="font-mono text-[10px] text-neo-on-surface-variant mb-3">{{ pos.description }}</p>
-          <div class="space-y-2">
+          <p class="font-mono text-[10px] text-neo-on-surface-variant mb-3">Kelompok yang sedang mengerjakan pos ini</p>
+          <div v-if="pos.groups.length" class="space-y-2">
             <div
               v-for="g in pos.groups"
               :key="g"
@@ -126,41 +83,38 @@ function getStatusBadge(status: string): { label: string; status: 'success' | 'w
               {{ g }}
             </div>
           </div>
-        </div>
-        <div class="border-t-2 border-neo-ink px-5 py-3">
-          <UButton color="primary" size="sm" variant="ghost" icon="i-lucide-arrow-right" block class="neo-hover">
-            Lihat di Pos Hub
-          </UButton>
+          <p v-else class="font-mono text-[10px] text-neo-on-surface-variant uppercase">Kosong</p>
         </div>
       </div>
     </div>
 
-    <NeoCard title="ACTIVITY LOG" icon="i-lucide-clock" badge="5 EVENTS">
+    <NeoCard title="FEED LIVE" icon="i-lucide-clock" :badge="`${liveEvents.length} EVENTS`">
       <div class="overflow-x-auto">
-        <table class="w-full">
+        <p v-if="liveEvents.length === 0" class="font-mono text-[10px] text-neo-on-surface-variant uppercase px-4 py-3">
+          Menunggu aktivitas realtime...
+        </p>
+        <table v-else class="w-full">
           <thead>
             <tr class="border-b-2 border-neo-ink">
               <th class="px-4 py-3 text-left font-mono text-[10px] font-bold uppercase tracking-widest">Waktu</th>
+              <th class="px-4 py-3 text-left font-mono text-[10px] font-bold uppercase tracking-widest">Tipe</th>
               <th class="px-4 py-3 text-left font-mono text-[10px] font-bold uppercase tracking-widest">Pos</th>
-              <th class="px-4 py-3 text-left font-mono text-[10px] font-bold uppercase tracking-widest">Kelompok</th>
               <th class="px-4 py-3 text-left font-mono text-[10px] font-bold uppercase tracking-widest">Aktivitas</th>
-              <th class="px-4 py-3 text-left font-mono text-[10px] font-bold uppercase tracking-widest">Status</th>
             </tr>
           </thead>
           <tbody>
             <tr
-              v-for="(log, i) in activityLog"
-              :key="i"
+              v-for="(e, i) in liveEvents"
+              :key="`${e.at}-${i}`"
               class="border-b border-neo-outline-variant hover:bg-neo-surface-container transition-colors"
             >
-              <td class="px-4 py-3 font-mono text-xs">{{ log.time }}</td>
+              <td class="px-4 py-3 font-mono text-xs">{{ e.at.slice(11, 16) }}</td>
               <td class="px-4 py-3">
-                <span class="font-mono text-[10px] neo-border rounded px-1.5 py-0.5 bg-neo-surface-container">{{ log.pos }}</span>
+                <span class="font-mono text-[10px] neo-border rounded px-1.5 py-0.5 bg-neo-surface-container uppercase">{{ e.type }}</span>
               </td>
-              <td class="px-4 py-3 font-display font-semibold text-sm">{{ log.group }}</td>
-              <td class="px-4 py-3 font-body text-xs">{{ log.activity }}</td>
-              <td class="px-4 py-3">
-                <StatusBadge :label="log.status" :status="getStatusBadge(log.status).status" />
+              <td class="px-4 py-3 font-display font-semibold text-sm">POS 0{{ e.positionId }}</td>
+              <td class="px-4 py-3 font-body text-xs">
+                {{ e.type === 'progress' ? `Regu menyelesaikan pos ini` : `Skor ${e.score} dicatat` }}
               </td>
             </tr>
           </tbody>

@@ -32,6 +32,20 @@ async function main() {
     await sql`insert into teams (name) values (${name}) on conflict (name) do nothing`
   }
 
+// Password staff dari env (JANGAN hardcode di repo): SEED_ADMIN_PASSWORD & SEED_KETUA_PASSWORD.
+  const staffSeeds = [
+    { username: 'admin', role: 'admin', password: process.env.SEED_ADMIN_PASSWORD },
+    { username: 'ketua', role: 'ketua', password: process.env.SEED_KETUA_PASSWORD },
+  ]
+  for (const s of staffSeeds) {
+    if (!s.password) throw new Error(`Set ${s.username === 'admin' ? 'SEED_ADMIN' : 'SEED_KETUA'}_PASSWORD di env`)
+    const hash = await bcrypt.hash(s.password, 10)
+    await sql`
+      insert into staff (username, password_hash, role) values (${s.username}, ${hash}, ${s.role})
+      on conflict (username) do update set password_hash = excluded.password_hash, role = excluded.role
+    `
+  }
+
   const [{ count: teams }] = await sql`select count(*)::int as count from teams`
   const [{ count: positions }] = await sql`select count(*)::int as count from positions`
   console.log(`seed ok: ${teams} teams, ${positions} positions`)

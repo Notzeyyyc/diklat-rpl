@@ -12,11 +12,6 @@ const password = ref('')
 const loading = ref(false)
 const error = ref('')
 
-const dummyAccounts = [
-  { username: 'admin', password: 'admin123', role: 'admin', redirect: '/admin/tracking-murid', name: 'Admin' },
-  { username: 'ketua', password: 'ketua123', role: 'ketua', redirect: '/ketua/panel', name: 'Siti Rahma' },
-]
-
 async function handleLogin() {
   error.value = ''
 
@@ -27,33 +22,23 @@ async function handleLogin() {
 
   loading.value = true
 
-  setTimeout(() => {
-    const account = dummyAccounts.find(
-      a => a.username === username.value && a.password === password.value
-    )
-
-    if (account) {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem('diklat_user', JSON.stringify({
-          username: account.username,
-          role: account.role,
-          name: account.name,
-        }))
-      }
-
-      useToast().add({
-        title: `Selamat datang, ${account.name}!`,
-        description: `Anda login sebagai ${account.role === 'admin' ? 'Admin' : 'Ketua Post'}.`,
-        color: 'success',
-      })
-
-      loading.value = false
-      navigateTo(account.redirect)
-    } else {
-      loading.value = false
-      error.value = 'ID atau Password salah. Silakan coba lagi.'
-    }
-  }, 1200)
+  try {
+    const user = await $fetch('/api/auth/login', {
+      method: 'POST',
+      body: { username: username.value.trim(), password: password.value },
+    })
+    useToast().add({
+      title: `Selamat datang, ${user.username}!`,
+      description: `Anda login sebagai ${user.role === 'admin' ? 'Admin' : 'Ketua Post'}.`,
+      color: 'success',
+    })
+    await navigateTo(user.role === 'admin' ? '/admin/tracking-murid' : '/ketua/panel')
+  } catch (e: unknown) {
+    const err = e as { statusCode?: number; statusMessage?: string }
+    error.value = err?.statusMessage ?? 'Login gagal. Silakan coba lagi.'
+  } finally {
+    loading.value = false
+  }
 }
 </script>
 

@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import type { SessionUser } from '@diklat/shared'
+
 definePageMeta({
   layout: 'ketua',
 })
@@ -7,15 +9,7 @@ useHead({
   title: 'Akun - Ketua Post',
 })
 
-const user = ref({
-  name: 'Siti Rahma',
-  id: 'KTP-03-2026',
-  role: 'Ketua Post Lapangan',
-  pos: 'POS-03',
-  email: 'siti.rahma@diklat2026.id',
-  phone: '0812-3456-7890',
-  joinDate: '2026-01-15',
-})
+const { data: user } = await useFetch<SessionUser | null>('/api/auth/me')
 
 const notifications = ref([
   { label: 'Notifikasi Push', description: 'Terima notifikasi langsung di browser', enabled: true },
@@ -25,30 +19,19 @@ const notifications = ref([
 ])
 
 const isEditing = ref(false)
-const editForm = ref({ ...user.value })
-
-function saveProfile() {
-  user.value = { ...editForm.value }
-  isEditing.value = false
-  useToast().add({
-    title: 'Profil berhasil disimpan',
-    description: 'Perubahan pada profil Anda telah tersimpan.',
-    color: 'success',
-  })
-}
 
 function cancelEdit() {
-  editForm.value = { ...user.value }
   isEditing.value = false
 }
 
-function handleLogout() {
+async function handleLogout() {
+  await $fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
   useToast().add({
     title: 'Logout berhasil',
     description: 'Anda telah keluar dari sistem.',
     color: 'info',
   })
-  navigateTo('/login')
+  await navigateTo('/login')
 }
 </script>
 
@@ -66,31 +49,23 @@ function handleLogout() {
       <div class="lg:col-span-1">
         <NeoCard>
           <div class="text-center">
-            <UAvatar size="xl" :alt="user.name" class="neo-border-thick neo-shadow-lg mx-auto mb-4" />
-            <h2 class="font-display font-bold text-xl tracking-tight">{{ user.name }}</h2>
-            <p class="font-mono text-[10px] text-neo-on-surface-variant uppercase tracking-widest mt-1">{{ user.id }}</p>
+            <UAvatar size="xl" :alt="user?.username ?? 'Ketua'" class="neo-border-thick neo-shadow-lg mx-auto mb-4" />
+            <h2 class="font-display font-bold text-xl tracking-tight capitalize">{{ user?.username ?? 'Ketua' }}</h2>
+            <p class="font-mono text-[10px] text-neo-on-surface-variant uppercase tracking-widest mt-1">PANITIA 2026</p>
             <div class="mt-3">
-              <StatusBadge :label="user.role" status="active" />
+              <StatusBadge :label="user?.role ?? 'ketua'" status="active" />
             </div>
           </div>
 
           <template #footer>
             <div class="space-y-3">
               <div class="flex items-center gap-3 text-sm">
-                <UIcon name="i-lucide-map-pin" class="w-4 h-4 text-neo-primary shrink-0" />
-                <span class="font-body">{{ user.pos }}</span>
-              </div>
-              <div class="flex items-center gap-3 text-sm">
-                <UIcon name="i-lucide-mail" class="w-4 h-4 text-neo-primary shrink-0" />
-                <span class="font-body truncate">{{ user.email }}</span>
-              </div>
-              <div class="flex items-center gap-3 text-sm">
-                <UIcon name="i-lucide-phone" class="w-4 h-4 text-neo-primary shrink-0" />
-                <span class="font-body">{{ user.phone }}</span>
+                <UIcon name="i-lucide-shield" class="w-4 h-4 text-neo-primary shrink-0" />
+                <span class="font-body capitalize">{{ user?.role === 'admin' ? 'Administrator' : 'Ketua Post Lapangan' }}</span>
               </div>
               <div class="flex items-center gap-3 text-sm">
                 <UIcon name="i-lucide-calendar" class="w-4 h-4 text-neo-primary shrink-0" />
-                <span class="font-body">Bergabung {{ user.joinDate }}</span>
+                <span class="font-body">Angkatan 2026</span>
               </div>
             </div>
           </template>
@@ -115,54 +90,22 @@ function handleLogout() {
           </template>
 
           <div v-if="isEditing" class="space-y-5">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
-              <div>
-                <label class="block font-mono text-[10px] font-bold uppercase tracking-widest text-neo-on-surface-variant mb-2">
-                  Nama Lengkap
-                </label>
-                <UInput v-model="editForm.name" placeholder="Nama" icon="i-lucide-user" />
-              </div>
-              <div>
-                <label class="block font-mono text-[10px] font-bold uppercase tracking-widest text-neo-on-surface-variant mb-2">
-                  ID Panitia
-                </label>
-                <UInput v-model="editForm.id" placeholder="ID" icon="i-lucide-hash" disabled />
-              </div>
-              <div>
-                <label class="block font-mono text-[10px] font-bold uppercase tracking-widest text-neo-on-surface-variant mb-2">
-                  Email
-                </label>
-                <UInput v-model="editForm.email" placeholder="Email" icon="i-lucide-mail" />
-              </div>
-              <div>
-                <label class="block font-mono text-[10px] font-bold uppercase tracking-widest text-neo-on-surface-variant mb-2">
-                  No. Telepon
-                </label>
-                <UInput v-model="editForm.phone" placeholder="Telepon" icon="i-lucide-phone" />
-              </div>
-            </div>
+            <p class="font-mono text-[10px] text-neo-on-surface-variant uppercase">
+              Profil panitia dikelola server — tidak dapat diubah dari sini.
+            </p>
             <div class="flex gap-3 justify-end">
               <UButton color="neutral" size="sm" class="neo-hover" @click="cancelEdit">Batal</UButton>
-              <UButton color="primary" size="sm" icon="i-lucide-check" class="neo-hover" @click="saveProfile">Simpan</UButton>
             </div>
           </div>
 
           <div v-else class="space-y-4">
             <div class="flex items-center justify-between py-3 border-b border-neo-outline-variant">
               <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-neo-on-surface-variant">Nama</span>
-              <span class="font-display font-semibold text-sm">{{ user.name }}</span>
-            </div>
-            <div class="flex items-center justify-between py-3 border-b border-neo-outline-variant">
-              <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-neo-on-surface-variant">ID</span>
-              <span class="font-mono text-xs neo-border rounded px-2 py-0.5 bg-neo-surface-container">{{ user.id }}</span>
+              <span class="font-display font-semibold text-sm capitalize">{{ user?.username ?? 'Ketua' }}</span>
             </div>
             <div class="flex items-center justify-between py-3 border-b border-neo-outline-variant">
               <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-neo-on-surface-variant">Role</span>
-              <span class="font-body text-sm">{{ user.role }}</span>
-            </div>
-            <div class="flex items-center justify-between py-3 border-b border-neo-outline-variant">
-              <span class="font-mono text-[10px] font-bold uppercase tracking-widest text-neo-on-surface-variant">Pos</span>
-              <span class="font-mono text-xs neo-border rounded px-2 py-0.5 bg-neo-primary-container text-white">{{ user.pos }}</span>
+              <span class="font-body text-sm capitalize">{{ user?.role ?? 'ketua' }}</span>
             </div>
           </div>
         </NeoCard>

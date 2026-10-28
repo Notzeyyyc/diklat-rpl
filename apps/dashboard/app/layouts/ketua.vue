@@ -1,5 +1,14 @@
 <script setup lang="ts">
 import type { NavigationMenuItem } from '@nuxt/ui'
+import type { SessionUser } from '@diklat/shared'
+
+const { data: user } = useFetch<SessionUser | null>('/api/auth/me')
+
+async function logout() {
+  await $fetch('/api/auth/logout', { method: 'POST' }).catch(() => {})
+  useToast().add({ title: 'Sampai jumpa!', description: 'Anda telah keluar.', color: 'neutral' })
+  await navigateTo('/login')
+}
 
 const items: NavigationMenuItem[][] = [
   [
@@ -66,12 +75,15 @@ const items: NavigationMenuItem[][] = [
 
       <template #footer>
         <div class="flex items-center gap-3">
-          <UAvatar size="sm" alt="Ketua" class="neo-border neo-shadow-sm" />
+          <UAvatar size="sm" :alt="user?.username ?? 'Ketua'" class="neo-border neo-shadow-sm" />
           <div class="flex flex-col min-w-0">
-            <span class="font-display font-semibold text-sm truncate">Siti Rahma</span>
-            <span class="font-mono text-[10px] text-neo-on-surface-variant truncate">KTP-03-2026</span>
+            <span class="font-display font-semibold text-sm truncate capitalize">{{ user?.username ?? 'Ketua' }}</span>
+            <span class="font-mono text-[10px] text-neo-on-surface-variant truncate">Ketua Post</span>
           </div>
         </div>
+        <UButton color="neutral" variant="ghost" size="sm" icon="i-lucide-log-out" block class="neo-hover" @click="logout">
+          Logout
+        </UButton>
       </template>
     </UDashboardSidebar>
 

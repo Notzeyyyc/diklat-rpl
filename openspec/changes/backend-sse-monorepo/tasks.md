@@ -27,12 +27,12 @@
 
 ## 3. Fase 2 — Dashboard
 
-- [ ] 3.1 Seed staff (bcrypt) + login `/api/auth/login` (h3 session httpOnly) + logout; hapus `dummyAccounts` & kredensial hardcoded
-- [ ] 3.2 `server/middleware/auth.ts` (API guard role) + `middleware/auth.global.ts` (halaman) untuk `/admin/*` vs `/ketua/*`
-- [ ] 3.3 Ganti semua data mock → `/api/admin/overview`; StatCard dari count DB
-- [ ] 3.4 `POST /api/scores` (ketua/admin) + publish SSE; leaderboard & tracking subscribe `scores` live
-- [ ] 3.5 Wire Print/Export CSV (escape koma/quote) atau hapus tombolnya; aktifkan POS Hub per-pos atau hapus tab
-- [ ] 3.6 Test dashboard: login salah/benar, guard role, submit skor → SSE; `pnpm -r build` hijau → commit
+- [x] 3.1 Seed staff (bcrypt) + login `/api/auth/login` (h3 session httpOnly) + logout; hapus `dummyAccounts` & kredensial hardcoded
+- [x] 3.2 `server/middleware/auth.ts` (API guard role) + `middleware/auth.global.ts` (halaman) untuk `/admin/*` vs `/ketua/*`
+- [x] 3.3 Ganti semua data mock → `/api/admin/overview`; StatCard dari count DB
+- [x] 3.4 `POST /api/scores` (ketua/admin) + publish SSE; leaderboard & tracking subscribe `scores` live
+- [x] 3.5 Wire Print/Export CSV (escape koma/quote) atau hapus tombolnya; aktifkan POS Hub per-pos atau hapus tab
+- [x] 3.6 Test dashboard: login salah/benar, guard role, submit skor → SSE; `pnpm -r build` hijau → commit
 
 ## 4. Fase 3 — Mobile polish (kedua app)
 
