@@ -10,12 +10,13 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "@diklat/shared": "workspace:*",
     "@nuxt/ui": "^4.11.1",
-    "nuxt": "^4.0.0",
-    "@diklat/shared": "workspace:*"
+    "nuxt": "^4.0.0"
   },
   "devDependencies": {
     "@types/node": "^24.13.3",
+    "tailwindcss": "^4",
     "typescript": "~6.0.2",
     "vue-tsc": "^3.3.11"
   }
