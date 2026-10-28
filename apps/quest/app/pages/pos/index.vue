@@ -21,7 +21,7 @@
 
 <script setup lang="ts">
 const router = useRouter()
-const { state, isPosCompleted, isPosAvailable, completePos } = useGameState()
+const { state, isPosCompleted, completePos } = useGameState()
 
 // SSE live: pos kebuka otomatis tanpa refresh; fallback polling refetch dari API.
 const refetch = async () => {
@@ -38,7 +38,7 @@ useRealtime((e) => {
 }, refetch)
 
 const handleSelectPos = (pos: number) => {
-  if (isPosAvailable(pos)) {
+  if (!isPosCompleted(pos)) {
     router.push(`/pos/${pos}`)
   }
 }

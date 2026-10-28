@@ -13,14 +13,14 @@
           @prevSlide="currentSlide = 1"
         >
           <template #slide1>
-            <PasswordInput v-model="password" label="MASUKKAN PASSWORD DARI PANITIA" placeholder="Password dari panitia" />
+            <PasswordInput v-model="password" label="MASUKKAN CODE DARI KETUA" placeholder="Code dari ketua" />
             <ValidationMessage :message="statusMessage" :variant="statusVariant" :icon="statusIcon" />
             <button
               type="button"
               class="w-full mt-3 bg-primary-container text-on-primary py-4 px-6 rounded-lg text-label-btn tracking-wider uppercase border-[3px] border-on-surface shadow-[4px_4px_0px_#1c1b1b] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_#1c1b1b] transition-all flex items-center justify-center gap-2 font-bold cursor-pointer"
               @click="handleVerification"
             >
-              <span>VERIFIKASI PASSWORD</span>
+              <span>VERIFIKASI CODE</span>
               <span class="material-symbols-outlined text-[20px]">check_circle</span>
             </button>
           </template>
@@ -28,7 +28,7 @@
 
         <QRScanner
           title="SCAN QR UNTUK LANJUT"
-          description="Scan QR yang diberikan penjaga pos, atau ketik password secara manual."
+          description="Scan QR code yang ditampilkan ketua di pos, atau ketik code secara manual."
           buttonText="MULAI SCAN"
           @scan="handleScanQR"
         />
@@ -47,16 +47,13 @@
 <script setup lang="ts">
 const route = useRoute()
 const router = useRouter()
-const { state, completePos, isValidPos, isPosAvailable } = useGameState()
+const { state, completePos, isValidPos } = useGameState()
 
 const posId = computed(() => Number(route.params.id))
 
-// Route guard: id ga valid → 404. Pos terkunci (sebelumnya belum selesai) → balik ke daftar pos
+// Route guard: id ga valid → 404. POS semua kebuka (keputusan owner 28 Okt) — tanpa lock sequential.
 if (!isValidPos(posId.value)) {
   throw createError({ statusCode: 404, statusMessage: 'Pos tidak ditemukan', fatal: true })
-}
-if (!isPosAvailable(posId.value)) {
-  await navigateTo('/pos', { redirectCode: 302 })
 }
 
 const currentSlide = ref(1)
@@ -69,15 +66,15 @@ const procedureSteps = [
   { bold: 'Baca puzzle', text: ' biner pada kartu di atas dengan teliti.' },
   { bold: 'Kunjungi pos fisik', text: ' di area Parkiran Kampus.' },
   { bold: 'Beritahu jawaban', text: ' langsung secara lisan ke panitia pos.' },
-  { bold: 'Terima password', text: ' & masukkan ke kolom di atas untuk verifikasi.', highlight: true },
+  { bold: 'Minta code', text: ' ke ketua di pos, lalu masukkan/scan untuk verifikasi.', highlight: true },
 ]
 
 const handleVerification = async () => {
-  const val = password.value.trim()
+  const val = password.value.trim().toUpperCase()
 
   if (!val) {
     statusVariant.value = 'error'
-    statusMessage.value = 'Masukkan password dari panitia terlebih dahulu!'
+    statusMessage.value = 'Masukkan code dari ketua terlebih dahulu!'
     statusIcon.value = 'error'
     return
   }
@@ -92,7 +89,7 @@ const handleVerification = async () => {
   try {
     await $fetch(`/api/pos/${posId.value}/verify`, {
       method: 'POST',
-      body: { teamId: state.value.teamId, password: val },
+      body: { teamId: state.value.teamId, code: val },
     })
     statusVariant.value = 'success'
     statusMessage.value = 'BERHASIL! Menuju halaman progres...'
@@ -110,7 +107,7 @@ const handleVerification = async () => {
 }
 
 const handleScanQR = (value: string) => {
-  // QR berisi password pos → masuk alur verify server yang sama
+  // QR berisi code pos → masuk alur verify server yang sama
   password.value = value
   handleVerification()
 }

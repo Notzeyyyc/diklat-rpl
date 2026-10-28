@@ -29,7 +29,7 @@
 <script setup lang="ts">
 const route = useRoute()
 const router = useRouter()
-const { state, isPosCompleted, isPosAvailable, isValidPos, completePos, progress } = useGameState()
+const { state, isPosCompleted, isValidPos, completePos, progress } = useGameState()
 
 // SSE live: progres update tanpa refresh
 const refetch = async () => {
@@ -52,7 +52,7 @@ const lastCompletedPos = ref(isValidDone ? doneParam : 0)
 const showToast = ref(lastCompletedPos.value > 0)
 
 const handleSelectPos = (pos: number) => {
-  if (isPosAvailable(pos) && !isPosCompleted(pos)) {
+  if (!isPosCompleted(pos)) {
     router.push(`/pos/${pos}`)
   }
 }

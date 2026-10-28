@@ -1,5 +1,4 @@
-import bcrypt from 'bcryptjs'
-import { isValidPos, isPosAvailable } from '@diklat/shared'
+import { isValidPos } from '@diklat/shared'
 import { db } from '../../../utils/db'
 import { publish } from '../../../utils/bus'
 import { clientIp, rateLimit } from '../../../utils/ratelimit'
@@ -10,27 +9,23 @@ export default defineEventHandler(async (event) => {
   const positionId = Number(getRouterParam(event, 'id'))
   if (!isValidPos(positionId)) throw createError({ statusCode: 404, statusMessage: 'Pos tidak ditemukan' })
 
-  const body = await readBody<{ teamId?: string; password?: string }>(event)
+  const body = await readBody<{ teamId?: string; code?: string }>(event)
   const teamId = body?.teamId ?? ''
-  const password = (body?.password ?? '').trim()
+  const code = (body?.code ?? '').trim().toUpperCase()
   if (!/^[0-9a-fA-F-]{36}$/.test(teamId)) throw createError({ statusCode: 400, statusMessage: 'teamId tidak valid' })
-  if (!password) throw createError({ statusCode: 400, statusMessage: 'Password wajib diisi' })
+  if (!code) throw createError({ statusCode: 400, statusMessage: 'Code wajib diisi' })
 
   const [team] = await db`select id from teams where id = ${teamId}`
   if (!team) throw createError({ statusCode: 404, statusMessage: 'Regu tidak ditemukan' })
 
-  const [pos] = await db`select password_hash from positions where id = ${positionId}`
-  if (!pos) throw createError({ statusCode: 404, statusMessage: 'Pos tidak ditemukan' })
-
-  // guard sequential server-side: completedPos baca dari DB, bukan client
-  const completed = await db`select position_id from team_progress where team_id = ${teamId}`
-  const completedIds = completed.map((r) => r.position_id)
-  if (!isPosAvailable(positionId, completedIds)) {
-    throw createError({ statusCode: 403, statusMessage: 'Pos masih terkunci — selesaikan pos sebelumnya' })
-  }
-
-  if (!(await bcrypt.compare(password, pos.password_hash))) {
-    throw createError({ statusCode: 401, statusMessage: 'Password salah. Konfirmasi ke panitia di Pos!' })
+  // One-time code per regu dari ketua: cocokkan code aktif (used_at is null), lalu hanguskan atomis.
+  const rows = await db`
+    update pos_codes set used_at = now()
+    where team_id = ${teamId} and position_id = ${positionId}
+      and code = ${code} and used_at is null
+    returning id`
+  if (rows.length === 0) {
+    throw createError({ statusCode: 401, statusMessage: 'Code salah atau sudah hangus — minta code baru dari ketua di pos' })
   }
 
   const [row] = await db`

@@ -56,7 +56,7 @@
           type="text"
           maxlength="40"
           autocomplete="off"
-          placeholder="Ketik password dari panitia"
+          placeholder="Ketik code dari ketua"
           class="flex-1 border-[2px] border-on-surface rounded-lg px-3 py-3 text-on-surface bg-surface-container-lowest"
         />
       </form>

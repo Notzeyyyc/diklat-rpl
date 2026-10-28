@@ -30,26 +30,20 @@
   <button
     v-else
     class="group relative bg-[#FFFFFF] rounded-xl border-[3.5px] border-[#111111] shadow-[5px_5px_0px_#111111] active:translate-x-[2px] active:translate-y-[2px] active:shadow-[2px_2px_0px_#111111] p-4 flex flex-col justify-between h-40 transition-all duration-75 text-left overflow-hidden"
-    :class="{ 'cursor-default opacity-60': !isAvailable }"
-    :disabled="!isAvailable"
     @click="$emit('select', posNumber)"
     type="button"
   >
     <div class="flex items-center justify-between w-full">
-      <span v-if="isAvailable" class=" text-label-badge uppercase tracking-widest text-on-surface-variant">AVAILABLE</span>
-      <span v-else class=" text-label-badge uppercase tracking-widest text-on-surface-variant">LOCKED</span>
-      <span v-if="isAvailable" class="w-2.5 h-2.5 rounded-full bg-primary-container border-[1.5px] border-[#111111]"></span>
-      <span v-else class="w-2.5 h-2.5 rounded-full bg-outline-variant border-[1.5px] border-[#111111]"></span>
+      <span class=" text-label-badge uppercase tracking-widest text-on-surface-variant">AVAILABLE</span>
+      <span class="w-2.5 h-2.5 rounded-full bg-primary-container border-[1.5px] border-[#111111]"></span>
     </div>
     <div class="flex flex-col my-auto">
       <span class=" text-[30px] leading-tight text-on-surface font-extrabold tracking-tight group-hover:text-primary transition-colors">POS {{ posNumber }}</span>
       <span v-if="posSubtitle" class=" text-body-sm text-on-surface-variant font-medium">{{ posSubtitle }}</span>
     </div>
     <div class="w-full flex items-center justify-between text-on-surface pt-2 border-t-[2px] border-[#111111]/20">
-      <span v-if="isAvailable" class=" text-body-sm font-bold text-primary">MASUK POS</span>
-      <span v-else class=" text-body-sm font-bold text-outline">BELUM TERBUKA</span>
-      <span v-if="isAvailable" class="material-symbols-outlined text-[18px] text-on-surface group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
-      <span v-else class="material-symbols-outlined text-[18px] text-outline">lock</span>
+      <span class=" text-body-sm font-bold text-primary">MASUK POS</span>
+      <span class="material-symbols-outlined text-[18px] text-on-surface group-hover:translate-x-0.5 transition-transform">arrow_forward</span>
     </div>
   </button>
 </template>
@@ -58,7 +52,6 @@
 defineProps<{
   posNumber: number
   isCompleted: boolean
-  isAvailable: boolean
   posSubtitle?: string
   showProgress?: boolean
 }>()

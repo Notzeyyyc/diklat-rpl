@@ -21,10 +21,6 @@ export const useGameState = () => {
 
   const isPosCompleted = (pos: number) => state.value.completedPos.includes(pos)
 
-  // Sequential: pos 1 selalu buka; pos n buka kalau n-1 selesai.
-  const isPosAvailable = (pos: number) =>
-    pos === 1 || state.value.completedPos.includes(pos - 1)
-
   const isValidPos = (pos: number) =>
     Number.isInteger(pos) && pos >= 1 && pos <= state.value.totalPos
 
@@ -86,7 +82,6 @@ export const useGameState = () => {
     loadFromApi,
     completePos,
     isPosCompleted,
-    isPosAvailable,
     isValidPos,
     progress,
   }

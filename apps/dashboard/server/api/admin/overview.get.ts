@@ -2,7 +2,7 @@ import type { OverviewResponse } from '@diklat/shared'
 import { requireStaff } from '../../utils/session'
 
 export default defineEventHandler(async (event): Promise<OverviewResponse> => {
-  await requireStaff(event, ['admin'])
+  await requireStaff(event, ['admin', 'ketua'])
 
   const teams = await db`select id, name, created_at from teams order by name`
   const progress = await db`select team_id, position_id from team_progress`

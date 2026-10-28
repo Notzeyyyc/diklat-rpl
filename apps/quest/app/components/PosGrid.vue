@@ -7,7 +7,6 @@
         :key="pos"
         :pos-number="pos"
         :is-completed="isPosCompleted(pos)"
-        :is-available="isPosAvailable(pos)"
         :pos-subtitle="showSubtitles ? getPosSubtitle(pos) : undefined"
         @select="$emit('select', pos)"
       />
@@ -20,7 +19,6 @@
         :key="pos"
         :pos-number="pos"
         :is-completed="isPosCompleted(pos)"
-        :is-available="isPosAvailable(pos)"
         :pos-subtitle="showSubtitles ? getPosSubtitle(pos) : undefined"
         @select="$emit('select', pos)"
       />
@@ -31,7 +29,6 @@
       <PosButton
         :pos-number="5"
         :is-completed="isPosCompleted(5)"
-        :is-available="isPosAvailable(5)"
         :pos-subtitle="showSubtitles ? getPosSubtitle(5) : undefined"
         class="w-full max-w-[280px]"
         @select="$emit('select', 5)"
@@ -50,7 +47,7 @@ defineEmits<{
 }>()
 
 // Single source of truth: locking dari composable, bukan lokal
-const { isPosCompleted, isPosAvailable } = useGameState()
+const { isPosCompleted } = useGameState()
 
 const posSubtitles: Record<number, string> = {
   1: 'Algoritma & Logic',

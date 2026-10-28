@@ -13,9 +13,20 @@ create table if not exists teams (
 
 create table if not exists positions (
   id int primary key check (id between 1 and 5),
-  title text not null,
-  password_hash text not null
+  title text not null
 );
+
+-- one-time code per (regu, pos), digenerate ketua; hangus setelah dipakai (used_at terisi)
+create table if not exists pos_codes (
+  id uuid primary key default gen_random_uuid(),
+  team_id uuid not null references teams on delete cascade,
+  position_id int not null references positions on delete cascade,
+  code text not null,
+  used_at timestamptz,
+  created_at timestamptz default now()
+);
+create unique index if not exists idx_pos_codes_active
+  on pos_codes (team_id, position_id) where used_at is null;
 
 create table if not exists team_progress (
   team_id uuid references teams on delete cascade,

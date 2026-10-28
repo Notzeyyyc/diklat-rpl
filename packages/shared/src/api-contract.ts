@@ -12,15 +12,19 @@ export interface RegisterTeamResponse {
 /** GET /api/teams */
 export type TeamsListResponse = Team[]
 
-/** POST /api/pos/:id/verify */
+/** POST /api/pos/:id/verify — one-time code dari ketua (hangus sekali pakai) */
 export interface VerifyPosRequest {
   teamId: string
-  password: string
+  code: string
 }
 export interface VerifyPosResponse {
   ok: true
   positionId: number
 }
+
+/** POST /api/admin/pos-codes — ketua generate one-time code untuk (regu, pos) */
+export interface GeneratePosCodeRequest { teamId: string; positionId: number }
+export interface GeneratePosCodeResponse { code: string }
 
 export type ApiError = { error: string }
 

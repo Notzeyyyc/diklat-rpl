@@ -1,5 +1,5 @@
-// Seed: 5 pos (password bcrypt) + 10 tim. Jalankan: pnpm --filter @diklat/shared seed
-// DATABASE_URL wajib di env. Password pos tidak pernah di client — hanya hash.
+// Seed: 5 pos + 10 tim. Jalankan: pnpm --filter @diklat/shared seed
+// DATABASE_URL wajib di env. Password pos statis dihapus (28 Okt): verifikasi pakai one-time code.
 import { readFileSync } from 'node:fs'
 import postgres from 'postgres'
 import bcrypt from 'bcryptjs'
@@ -12,19 +12,14 @@ const TEAM_SEEDS = [
   'HTML HEROES', 'STACK SMASHERS', 'LOOP LEGENDS', 'PIXEL PIONEERS', 'CACHE KINGS',
 ]
 
-const POS_PASSWORDS: Record<number, string> = {
-  1: 'RPLJUARA1', 2: 'RPLJUARA2', 3: 'RPLJUARA3', 4: 'RPLJUARA4', 5: 'RPLJUARA5',
-}
-
 async function main() {
   const schema = readFileSync(new URL('../schema.sql', import.meta.url), 'utf8')
   await sql.unsafe(schema)
 
   for (const pos of POSITIONS) {
-    const hash = await bcrypt.hash(POS_PASSWORDS[pos.id]!, 10)
     await sql`
-      insert into positions (id, title, password_hash) values (${pos.id}, ${pos.title}, ${hash})
-      on conflict (id) do update set title = excluded.title, password_hash = excluded.password_hash
+      insert into positions (id, title) values (${pos.id}, ${pos.title})
+      on conflict (id) do update set title = excluded.title
     `
   }
 
@@ -32,7 +27,7 @@ async function main() {
     await sql`insert into teams (name) values (${name}) on conflict (name) do nothing`
   }
 
-// Password staff dari env (JANGAN hardcode di repo): SEED_ADMIN_PASSWORD & SEED_KETUA_PASSWORD.
+  // Password staff dari env (JANGAN hardcode di repo): SEED_ADMIN_PASSWORD & SEED_KETUA_PASSWORD.
   const staffSeeds = [
     { username: 'admin', role: 'admin', password: process.env.SEED_ADMIN_PASSWORD },
     { username: 'ketua', role: 'ketua', password: process.env.SEED_KETUA_PASSWORD },

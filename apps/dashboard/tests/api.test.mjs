@@ -28,11 +28,13 @@ test('login salah → 401', async () => {
   assert.equal(res.status, 401)
 })
 
-test('login admin benar → cookie session; guard role: ketua tidak boleh /api/admin/*', async () => {
+test('login ketua → cookie session; guard role: ketua boleh GET overview (panel), tidak boleh POST /api/admin/*', async () => {
   const { res, cookie } = await login(KETUA)
   assert.equal(res.status, 200)
   assert.match(cookie, /diklat\.sid/)
-  const denied = await api('/api/admin/overview', { headers: { cookie } })
+  const overview = await api('/api/admin/overview', { headers: { cookie } })
+  assert.equal(overview.status, 200)
+  const denied = await api('/api/admin/overview', { method: 'POST', headers: { cookie }, body: JSON.stringify({}) })
   assert.equal(denied.status, 403)
 })
 
@@ -96,6 +98,20 @@ test('skor tidak valid → 400', async () => {
     body: JSON.stringify({ teamId, positionId: 1, score: 150 }),
   })
   assert.equal(bad.status, 400)
+})
+
+test('generate one-time code: ketua boleh, tanpa login 401', async () => {
+  assert.equal((await api('/api/admin/pos-codes', { method: 'POST', body: JSON.stringify({}) })).status, 401)
+  const { cookie } = await login(KETUA)
+  const overview = await api('/api/admin/overview', { headers: { cookie } })
+  const teamId = overview.body.teams[0].teamId
+  const res = await api('/api/admin/pos-codes', {
+    method: 'POST',
+    headers: { cookie },
+    body: JSON.stringify({ teamId, positionId: 1 }),
+  })
+  assert.equal(res.status, 200)
+  assert.match(res.body.code, /^[A-Z2-9]{6}$/)
 })
 
 test('logout clear session', async () => {
