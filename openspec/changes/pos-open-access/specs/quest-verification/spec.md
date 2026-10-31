@@ -6,8 +6,8 @@ Registrasi regu, verifikasi one-time code pos di server, pencatatan progres — 
 
 ## MODIFIED Requirements
 
-### Requirement: Verifikasi one-time code pos server-side
-`POST /api/pos/:id/verify` (rate-limit 10 req/menit/IP) membandingkan `code` dengan baris aktif di `pos_codes` untuk (team, pos). Code TIDAK statis — digenerate ketua per regu. Sukses → code dihanguskan (`used_at`), catat baris `team_progress` + publish event SSE `progress`.
+### Requirement: Verifikasi password pos server-side
+`POST /api/pos/:id/verify` (rate-limit 10 req/menit/IP) membandingkan `code` dengan baris aktif di `pos_codes` untuk (team, pos). Code TIDAK statis — digenerate ketua per regu. Sukses → code dihanguskan (`used_at`), catat baris `team_progress` + publish event SSE `progress`. (Dulu: password statis bcrypt di `positions` — diganti one-time code per keputusan owner 28 Okt.)
 
 #### Scenario: Code valid
 - **WHEN** regu kirim code yang cocok dengan code belum terpakai untuk (team, pos)
