@@ -17,15 +17,15 @@ Registrasi regu, verifikasi password pos di server, pencatatan progres, dan lock
 - **THEN** response error 4xx dengan pesan jelas, tanpa membuat tim
 
 ### Requirement: Verifikasi password pos server-side
-`POST /api/pos/:id/verify` (rate-limit 10 req/menit/IP) membandingkan password dengan hash di tabel `positions`. Password pos TIDAK PERNAH ada di client bundle. Sukses → catat baris `team_progress` + publish event SSE `progress`.
+`POST /api/pos/:id/verify` (rate-limit 10 req/menit/IP) membandingkan `code` dengan baris aktif di `pos_codes` untuk (team, pos). Code TIDAK statis — digenerate ketua per regu. Sukses → code dihanguskan (`used_at`), catat baris `team_progress` + publish event SSE `progress`. (Dulu: password statis bcrypt di `positions` — diganti one-time code per keputusan owner 28 Okt.)
 
 #### Scenario: Password benar
-- **WHEN** regu kirim password pos yang cocok dengan hash
-- **THEN** progres pos tersebut tercatat dan event `progress` dipublish
+- **WHEN** regu kirim code yang cocok dengan code belum terpakai untuk (team, pos)
+- **THEN** progres pos tercatat, code hangus, event `progress` dipublish
 
 #### Scenario: Password salah
-- **WHEN** password tidak cocok
-- **THEN** response 401/422, tidak ada progres tercatat, tidak ada event publish
+- **WHEN** code tidak cocok atau `used_at` sudah terisi (termasuk dipakai ulang)
+- **THEN** response 401, tidak ada progres tercatat
 
 #### Scenario: Rate limit
 - **WHEN** satu IP kirim > 10 request verify dalam 1 menit
