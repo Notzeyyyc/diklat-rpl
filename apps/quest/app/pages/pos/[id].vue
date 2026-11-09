@@ -89,7 +89,7 @@ const handleVerification = async () => {
   try {
     await $fetch(`/api/pos/${posId.value}/verify`, {
       method: 'POST',
-      body: { teamId: state.value.teamId, code: val },
+      body: { code: val },
     })
     statusVariant.value = 'success'
     statusMessage.value = 'BERHASIL! Menuju halaman progres...'

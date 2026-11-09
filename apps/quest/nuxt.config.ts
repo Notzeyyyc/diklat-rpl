@@ -3,8 +3,8 @@ export default defineNuxtConfig({
   modules: ['@nuxtjs/tailwindcss'],
   css: ['~/assets/css/main.css'],
   compatibilityDate: '2025-07-15',
-  devtools: { enabled: true },
-  vite: { server: { allowedHosts: true } },
+  // Keep development tooling and Vite host overrides out of production builds.
+  devtools: { enabled: false },
   app: {
     head: {
       title: 'DIKLAT 2026 - Orientation Quest',

@@ -1,5 +1,4 @@
 // ponytail: hanya 1 file state — sumber kebenaran = API/DB; localStorage cuma simpan team_id.
-import type { Team } from '@diklat/shared'
 
 interface GameState {
   teamId: string | null
@@ -39,12 +38,7 @@ export const useGameState = () => {
     } catch (err: unknown) {
       const status = (err as { statusCode?: number }).statusCode
       if (status !== 409) throw err
-      const teams = await $fetch<Team[]>('/api/teams')
-      const existing = teams.find((t) => t.name === clean)
-      if (!existing) throw err
-      state.value.teamId = existing.id
-      state.value.teamName = existing.name
-      state.value.completedPos = existing.completedPositions
+      throw err
     }
     if (import.meta.client && state.value.teamId) {
       localStorage.setItem(STORAGE_KEY, state.value.teamId)
@@ -58,7 +52,7 @@ export const useGameState = () => {
     const teamId = localStorage.getItem(STORAGE_KEY)
     if (!teamId) return
     try {
-      const teams = await $fetch<Team[]>('/api/teams')
+      const teams = await $fetch<{ id: string; name: string; completedPositions: number[] }[]>('/api/teams')
       const team = teams.find((t) => t.id === teamId)
       if (!team) {
         localStorage.removeItem(STORAGE_KEY)

@@ -8,7 +8,8 @@ create table if not exists staff (
 create table if not exists teams (
   id uuid primary key default gen_random_uuid(),
   name text unique not null check (char_length(name) between 3 and 40),
-  created_at timestamptz default now()
+  created_at timestamptz default now(),
+  access_token_hash text unique
 );
 
 create table if not exists positions (

@@ -1,5 +1,6 @@
 import bcrypt from 'bcryptjs'
 import type { LoginRequest } from '@diklat/shared'
+import { db } from '../../utils/db'
 import { useStaffSession } from '../../utils/session'
 import { clientIp, rateLimit } from '../../utils/ratelimit'
 
