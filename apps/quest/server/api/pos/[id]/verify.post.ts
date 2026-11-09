@@ -11,6 +11,8 @@ export default defineEventHandler(async (event) => {
   const body = await readBody<{ code?: string }>(event)
   const code = (body?.code ?? '').trim().toUpperCase()
   if (!code) throw createError({ statusCode: 400, statusMessage: 'Code wajib diisi' })
+  const [existing] = await db`select 1 from team_progress where team_id = ${team.id} and position_id = ${positionId}`
+  if (existing) return { ok: true, positionId }
   const rows = await db`update pos_codes set used_at = now() where team_id = ${team.id} and position_id = ${positionId} and code = ${code} and used_at is null returning id`
   if (rows.length === 0) throw createError({ statusCode: 401, statusMessage: 'Code salah atau sudah hangus — minta code baru dari ketua di pos' })
   const [row] = await db`insert into team_progress (team_id, position_id) values (${team.id}, ${positionId}) on conflict (team_id, position_id) do nothing returning completed_at`

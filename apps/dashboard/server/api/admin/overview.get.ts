@@ -1,5 +1,6 @@
 import type { OverviewResponse } from '@diklat/shared'
 import { requireStaff } from '../../utils/session'
+import { db } from '../../utils/db'
 
 export default defineEventHandler(async (event): Promise<OverviewResponse> => {
   await requireStaff(event, ['admin', 'ketua'])
