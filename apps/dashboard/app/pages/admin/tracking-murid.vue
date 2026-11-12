@@ -82,8 +82,8 @@ function exportCSV() {
             <span class="font-mono text-[10px] text-neo-on-surface-variant uppercase font-bold">Automatic Refresh</span>
             <span class="font-mono text-xs text-neo-on-surface font-bold">Interval: 5 Detik</span>
           </div>
-          <UButton color="neutral" size="md" icon="i-lucide-refresh-cw" class="neo-hover" @click="refresh">
-            Refresh Data
+          <UButton color="neutral" size="md" icon="i-lucide-refresh-cw" class="neo-hover whitespace-nowrap" @click="refresh">
+            Refresh
           </UButton>
         </div>
       </template>
@@ -190,8 +190,8 @@ function exportCSV() {
           Menampilkan {{ filteredTeams.length }} dari {{ overview.stats.totalTeams }} Kelompok
         </span>
         <div class="flex items-center gap-3 w-full sm:w-auto">
-          <UButton color="neutral" size="md" icon="i-lucide-download" class="neo-hover" @click="exportCSV">
-            Ekspor Data CSV
+          <UButton color="neutral" size="md" icon="i-lucide-download" class="neo-hover whitespace-nowrap" @click="exportCSV">
+            Ekspor CSV
           </UButton>
         </div>
       </div>

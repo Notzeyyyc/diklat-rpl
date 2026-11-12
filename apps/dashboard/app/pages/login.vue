@@ -66,13 +66,13 @@ async function handleLogin() {
             <h2 class="font-mono text-[12px] font-bold uppercase tracking-wider text-[#111]">LOGIN PANITIA</h2>
             <UIcon name="i-lucide-user" class="w-3.5 h-3.5 text-[#434656]" />
           </div>
-          <p class="font-mono text-[10px] text-[#737688] mb-4">Committee access portal</p>
+          <p class="font-mono text-[11px] text-[#434656] mb-4">Committee access portal</p>
 
           <div class="space-y-3.5">
             <div>
               <div class="flex items-center justify-between mb-1.5">
                 <label for="login-username" class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#111]">USERNAME</label>
-                <span class="font-mono text-[9px] text-[#737688] uppercase tracking-wider">PANITIA ID</span>
+                <span class="font-mono text-[10px] text-[#434656] uppercase tracking-wider">PANITIA ID</span>
               </div>
               <input
                 id="login-username"
@@ -80,14 +80,14 @@ async function handleLogin() {
                 type="text"
                 maxlength="50"
                 placeholder="Username"
-                class="w-full h-10 px-3 rounded-lg border border-[#111] bg-white text-[13px] text-[#111] placeholder:text-[#737688] outline-none transition-all duration-150 focus:ring-2 focus:ring-[#0A5CFF]/20 focus:border-[#0A5CFF] font-[inherit]"
+                class="w-full h-10 px-3 rounded-lg border border-[#111] bg-white text-[13px] text-[#111] placeholder:text-[#5b5e70] outline-none transition-all duration-150 focus:ring-2 focus:ring-[#0A5CFF]/20 focus:border-[#0A5CFF] font-[inherit]"
               />
             </div>
 
             <div>
               <div class="flex items-center justify-between mb-1.5">
                 <label for="login-password" class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#111]">PASSWORD</label>
-                <span class="font-mono text-[9px] text-[#737688] uppercase tracking-wider">MIN. 8 CHARS</span>
+                <span class="font-mono text-[10px] text-[#434656] uppercase tracking-wider">MIN. 8 CHARS</span>
               </div>
               <input
                 id="login-password"
@@ -95,7 +95,7 @@ async function handleLogin() {
                 type="password"
                 maxlength="100"
                 placeholder="Password"
-                class="w-full h-10 px-3 rounded-lg border border-[#111] bg-white text-[13px] text-[#111] placeholder:text-[#737688] outline-none transition-all duration-150 focus:ring-2 focus:ring-[#0A5CFF]/20 focus:border-[#0A5CFF] font-[inherit]"
+                class="w-full h-10 px-3 rounded-lg border border-[#111] bg-white text-[13px] text-[#111] placeholder:text-[#5b5e70] outline-none transition-all duration-150 focus:ring-2 focus:ring-[#0A5CFF]/20 focus:border-[#0A5CFF] font-[inherit]"
               />
             </div>
           </div>
@@ -127,9 +127,9 @@ async function handleLogin() {
       <div class="flex items-center justify-between mt-5 pt-4 border-t border-[#e5e2e1]">
         <div class="flex items-center gap-1.5">
           <span class="w-1.5 h-1.5 rounded-full bg-[#2dd4bf]"></span>
-          <span class="font-mono text-[9px] font-bold uppercase tracking-wider text-[#737688]">AUTH_NODE_01</span>
+          <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#434656]">AUTH_NODE_01</span>
         </div>
-        <span class="font-mono text-[9px] font-bold uppercase tracking-wider text-[#737688]">ENCRYPTED_PORT</span>
+        <span class="font-mono text-[10px] font-bold uppercase tracking-wider text-[#434656]">ENCRYPTED_PORT</span>
       </div>
     </div>
   </div>

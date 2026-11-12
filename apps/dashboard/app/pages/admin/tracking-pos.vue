@@ -72,7 +72,7 @@ const teamsInField = computed(() => overview.value.teams.filter(t => t.completed
           <span class="font-mono text-[10px] text-neo-on-surface-variant shrink-0">{{ pos.groupCount }} grp</span>
         </div>
         <div class="p-4 md:p-5">
-          <p class="font-mono text-[10px] text-neo-on-surface-variant mb-3">Kelompok yang sedang mengerjakan pos ini</p>
+          <p class="font-mono text-[10px] text-neo-on-surface-variant mb-3">{{ pos.groups.length ? 'Kelompok yang sedang mengerjakan pos ini' : 'Tidak ada kelompok di pos ini' }}</p>
           <div v-if="pos.groups.length" class="space-y-2">
             <div
               v-for="g in pos.groups"
@@ -83,7 +83,7 @@ const teamsInField = computed(() => overview.value.teams.filter(t => t.completed
               <span class="truncate">{{ g }}</span>
             </div>
           </div>
-          <p v-else class="font-mono text-[10px] text-neo-on-surface-variant uppercase">Kosong</p>
+          <p v-else class="font-mono text-[10px] text-neo-on-surface-variant uppercase">— Kosong —</p>
         </div>
       </div>
     </div>
