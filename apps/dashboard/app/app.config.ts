@@ -77,9 +77,22 @@ export default defineAppConfig({
         linkActive: 'bg-neo-primary text-white neo-shadow-sm',
       },
     },
+    select: {
+      slots: {
+        base: 'neo-border neo-shadow-sm rounded-lg bg-white font-body',
+        value: 'font-body',
+        placeholder: 'font-body text-neo-on-surface-variant',
+        content: 'neo-border-thick neo-shadow-lg bg-white rounded-lg',
+        item: 'font-body',
+      },
+    },
     selectMenu: {
       slots: {
-        base: 'neo-border neo-shadow-sm rounded-lg bg-white',
+        base: 'neo-border neo-shadow-sm rounded-lg bg-white font-body',
+        value: 'font-body',
+        placeholder: 'font-body text-neo-on-surface-variant',
+        content: 'neo-border-thick neo-shadow-lg bg-white rounded-lg',
+        item: 'font-body',
       },
     },
     toggle: {

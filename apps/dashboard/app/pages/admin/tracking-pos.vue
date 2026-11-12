@@ -58,29 +58,29 @@ const teamsInField = computed(() => overview.value.teams.filter(t => t.completed
       <StatCard label="Basecamp" :value="`${overview.stats.totalTeams - teamsInField - overview.stats.completedTeams} Kelompok`" subtext="Belum mulai" icon="i-lucide-check-circle" color="success" />
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-5">
       <div
         v-for="pos in posData"
         :key="pos.id"
         class="neo-border-thick neo-shadow-lg bg-white rounded-xl overflow-hidden"
       >
-        <div class="px-5 py-4 border-b-2 border-neo-ink flex items-center justify-between">
-          <div class="flex items-center gap-2">
-            <span class="font-mono text-xs font-bold neo-border rounded px-1.5 py-0.5 bg-neo-surface-container">{{ pos.id }}</span>
+        <div class="px-4 md:px-5 py-3 md:py-4 border-b-2 border-neo-ink flex items-center justify-between gap-2">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="font-mono text-xs font-bold neo-border rounded px-1.5 py-0.5 bg-neo-surface-container shrink-0">{{ pos.id }}</span>
             <StatusBadge :label="pos.status === 'busy' ? 'BUSY' : 'ACTIVE'" :status="pos.status === 'busy' ? 'busy' : 'active'" />
           </div>
-          <span class="font-mono text-[10px] text-neo-on-surface-variant">{{ pos.groupCount }} grp</span>
+          <span class="font-mono text-[10px] text-neo-on-surface-variant shrink-0">{{ pos.groupCount }} grp</span>
         </div>
-        <div class="p-5">
+        <div class="p-4 md:p-5">
           <p class="font-mono text-[10px] text-neo-on-surface-variant mb-3">Kelompok yang sedang mengerjakan pos ini</p>
           <div v-if="pos.groups.length" class="space-y-2">
             <div
               v-for="g in pos.groups"
               :key="g"
-              class="flex items-center gap-2 text-xs font-display font-semibold"
+              class="flex items-center gap-2 text-sm md:text-xs font-display font-semibold min-w-0"
             >
               <span class="w-1.5 h-1.5 rounded-full bg-neo-primary shrink-0" />
-              {{ g }}
+              <span class="truncate">{{ g }}</span>
             </div>
           </div>
           <p v-else class="font-mono text-[10px] text-neo-on-surface-variant uppercase">Kosong</p>
