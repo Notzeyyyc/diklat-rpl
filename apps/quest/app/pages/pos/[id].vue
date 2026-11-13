@@ -6,9 +6,9 @@
         <PuzzleHeader :posNumber="posId" statusText="Status: Misi Aktif • Sesi 01" />
 
         <PuzzleCard
+          v-if="puzzle"
           :currentSlide="currentSlide"
-          puzzleCode="01001000 01000101 01001100 01001100 01001111"
-          clueExample="01001000 = 72 = H"
+          :puzzle="puzzle"
           @nextSlide="currentSlide = 2"
           @prevSlide="currentSlide = 1"
         >
@@ -50,6 +50,7 @@ const router = useRouter()
 const { state, completePos, isValidPos } = useGameState()
 
 const posId = computed(() => Number(route.params.id))
+const puzzle = computed(() => getPosPuzzle(posId.value))
 
 // Route guard: id ga valid → 404. POS semua kebuka (keputusan owner 28 Okt) — tanpa lock sequential.
 if (!isValidPos(posId.value)) {
@@ -62,12 +63,12 @@ const statusMessage = ref('')
 const statusVariant = ref<'success' | 'error'>('error')
 const statusIcon = ref('')
 
-const procedureSteps = [
-  { bold: 'Baca puzzle', text: ' biner pada kartu di atas dengan teliti.' },
-  { bold: 'Kunjungi pos fisik', text: ' di area Parkiran Kampus.' },
+const procedureSteps = computed(() => [
+  { bold: 'Baca soal', text: ' pada kartu di atas dengan teliti.' },
+  { bold: 'Kunjungi pos fisik', text: ' sesuai clue lokasi (buka tab CLUE di atas).' },
   { bold: 'Beritahu jawaban', text: ' langsung secara lisan ke panitia pos.' },
   { bold: 'Minta code', text: ' ke ketua di pos, lalu masukkan/scan untuk verifikasi.', highlight: true },
-]
+])
 
 const handleVerification = async () => {
   const val = password.value.trim().toUpperCase()
