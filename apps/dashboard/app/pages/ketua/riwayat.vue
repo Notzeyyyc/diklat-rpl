@@ -11,7 +11,7 @@ useHead({
 
 const { overview } = useOverview()
 const searchQuery = ref('')
-const statusFilter = ref<{ label: string; value: string }>({ label: 'ALL', value: 'all' })
+const statusFilter = ref<string>('all')
 
 interface HistoryRow {
   teamName: string
@@ -49,7 +49,7 @@ const rowStatus = (h: HistoryRow) => (h.score >= 60 ? 'lulus' : 'remedial')
 const filteredHistory = computed(() => {
   return history.value.filter((h) => {
     const matchSearch = !searchQuery.value || h.teamName.toLowerCase().includes(searchQuery.value.toLowerCase())
-    const matchStatus = statusFilter.value.value === 'all' || rowStatus(h) === statusFilter.value.value
+    const matchStatus = statusFilter.value === 'all' || rowStatus(h) === statusFilter.value
     return matchSearch && matchStatus
   })
 })
@@ -105,7 +105,7 @@ function exportCSV() {
           icon="i-lucide-search"
           class="w-64"
         />
-        <USelectMenu
+        <USelect
           v-model="statusFilter"
           :items="statusOptions"
           placeholder="Filter Status"

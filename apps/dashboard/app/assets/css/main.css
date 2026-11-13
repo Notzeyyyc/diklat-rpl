@@ -122,6 +122,12 @@
   border-top: 3px solid var(--color-neo-ink);
 }
 
+/* USelect/USelectMenu: chevron trailing harus menempel di kanan box (tanpa ini jatuh ke kiri) */
+[role='combobox'] > span.absolute,
+button[aria-haspopup='listbox'] > span.absolute {
+  inset-inline-end: 0;
+}
+
 /* Mobile tap targets (Fase 3): minimal 44px pada coarse pointer */
 @media (pointer: coarse) {
   .neo-hover {

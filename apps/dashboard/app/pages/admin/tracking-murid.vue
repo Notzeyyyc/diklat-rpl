@@ -82,8 +82,8 @@ function exportCSV() {
             <span class="font-mono text-[10px] text-neo-on-surface-variant uppercase font-bold">Automatic Refresh</span>
             <span class="font-mono text-xs text-neo-on-surface font-bold">Interval: 5 Detik</span>
           </div>
-          <UButton color="neutral" size="md" icon="i-lucide-refresh-cw" class="neo-hover" @click="refresh">
-            Refresh Data
+          <UButton color="neutral" size="md" icon="i-lucide-refresh-cw" class="neo-hover whitespace-nowrap" @click="refresh">
+            Refresh
           </UButton>
         </div>
       </template>
@@ -127,7 +127,27 @@ function exportCSV() {
     </NeoCard>
 
     <div class="neo-border-thick neo-shadow-xl bg-white rounded-xl overflow-hidden">
-      <div class="overflow-x-auto">
+      <!-- Mobile: daftar kartu (tabel 4 kolom tidak muat di layar kecil) -->
+      <ul class="md:hidden divide-y-2 divide-neo-ink">
+        <li v-for="(team, idx) in filteredTeams" :key="team.name" class="p-4 space-y-3">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 shrink-0 rounded bg-neo-primary neo-border neo-shadow-sm flex items-center justify-center font-mono text-xs font-bold text-white">
+              {{ idx + 1 }}
+            </div>
+            <div class="min-w-0 flex-1">
+              <span class="font-display font-semibold text-sm block truncate">{{ team.name }}</span>
+              <span class="font-mono text-[10px] text-neo-on-surface-variant">Progres: {{ team.completedPositions.length }}/5 pos</span>
+            </div>
+            <StatusBadge :label="teamStatus(team)" :status="statusBadgeMap[teamStatus(team)] || 'active'" />
+          </div>
+          <div class="flex items-center justify-between font-mono text-xs">
+            <span class="neo-border rounded px-2 py-0.5 bg-neo-primary-container/10 font-bold">{{ team.completedPositions.length }}/5</span>
+            <span class="font-display font-semibold text-sm">{{ currentPos(team) }}</span>
+          </div>
+        </li>
+      </ul>
+
+      <div class="hidden md:block overflow-x-auto">
         <table class="w-full">
           <thead>
             <tr class="bg-neo-surface-container border-b-2 border-neo-ink">
@@ -169,9 +189,9 @@ function exportCSV() {
         <span class="font-mono text-[10px] text-neo-on-surface-variant uppercase tracking-widest">
           Menampilkan {{ filteredTeams.length }} dari {{ overview.stats.totalTeams }} Kelompok
         </span>
-        <div class="flex items-center gap-3">
-          <UButton color="neutral" size="md" icon="i-lucide-download" class="neo-hover" @click="exportCSV">
-            Ekspor Data CSV
+        <div class="flex items-center gap-3 w-full sm:w-auto">
+          <UButton color="neutral" size="md" icon="i-lucide-download" class="neo-hover whitespace-nowrap" @click="exportCSV">
+            Ekspor CSV
           </UButton>
         </div>
       </div>
